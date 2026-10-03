@@ -1,0 +1,113 @@
+@model IEnumerable<LinkAcademico.Models.Experiencia>
+
+@foreach (var exp in Model)
+{
+    <div class="home-feed-card">
+
+        @if (!string.IsNullOrEmpty(exp.ImagemUrl))
+        {
+            <img src="@exp.ImagemUrl"
+                 class="home-feed-image" />
+        }
+        else
+        {
+            <div class="home-feed-placeholder">
+
+                <i class="bi bi-image"></i>
+
+            </div>
+        }
+
+        <div class="home-feed-content">
+
+            <div class="home-feed-category">
+                @exp.Categoria
+            </div>
+
+            <div class="home-feed-title-card">
+                @exp.Titulo
+            </div>
+
+            <div class="home-feed-date">
+
+                <i class="bi bi-calendar-event"></i>
+
+                @exp.Data.ToString("dd/MM/yyyy")
+
+            </div>
+
+            <p class="text-muted">
+
+                @(exp.Descricao.Length > 180
+                    ? exp.Descricao.Substring(0, 180) + "..."
+                    : exp.Descricao)
+
+            </p>
+
+            @if (!string.IsNullOrEmpty(exp.Competencias))
+            {
+                <div class="mt-3">
+
+                    @foreach (var skill in exp.Competencias.Split(','))
+                    {
+                        <span class="skill-badge">
+
+                            @skill.Trim()
+
+                        </span>
+                    }
+
+                </div>
+            }
+
+            <div class="home-feed-user">
+
+                @if (!string.IsNullOrEmpty(exp.Estudante?.FotoPerfil))
+                {
+                    <img src="@exp.Estudante.FotoPerfil"
+                         class="feed-user-photo" />
+                }
+                else
+                {
+                    <img src="/images/default-user.png"
+                         class="feed-user-photo" />
+                }
+
+                <a asp-controller="Estudantes"
+                   asp-action="Perfil"
+                   asp-route-id="@exp.EstudanteId">
+
+                    @exp.Estudante?.Nome
+
+                </a>
+
+            </div>
+
+            <div class="mt-4 d-flex gap-2 flex-wrap">
+
+                <a asp-controller="Experiencias"
+                   asp-action="Details"
+                   asp-route-id="@exp.Id"
+                   class="btn btn-outline-primary rounded-pill">
+
+                    Ver detalhes
+
+                </a>
+
+                @if (!string.IsNullOrEmpty(exp.ProjetoUrl))
+                {
+                    <a href="@exp.ProjetoUrl"
+                       target="_blank"
+                       class="btn btn-primary rounded-pill">
+
+                        Projeto
+
+                    </a>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+}

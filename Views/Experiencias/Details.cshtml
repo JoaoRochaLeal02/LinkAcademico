@@ -1,0 +1,784 @@
+﻿@model LinkAcademico.Models.Experiencia
+
+@{
+    ViewData["Title"] = "Projeto";
+
+    bool ehDono =
+        User.Identity != null &&
+        User.Identity.IsAuthenticated &&
+        User.IsInRole("Estudante") &&
+        User.Identity.Name == Model.Estudante?.Email;
+}
+
+<style>
+
+    body {
+        background: linear-gradient(to bottom, #eef4fb 0%, #f4f7fb 220px);
+    }
+
+    .details-container {
+        max-width: 1400px;
+        margin: 40px auto 70px auto;
+    }
+
+    /* HERO */
+
+    .details-hero {
+        position: relative;
+        border-radius: 34px;
+        overflow: hidden;
+        background: white;
+        box-shadow: 0 20px 45px rgba(0,0,0,.08);
+        border: 1px solid #ececec;
+    }
+
+    .details-cover {
+        position: relative;
+    }
+
+    .details-image {
+        width: 100%;
+        height: 500px;
+        object-fit: cover;
+    }
+
+    .details-placeholder {
+        width: 100%;
+        height: 500px;
+        background: linear-gradient(135deg, #0a66c2, #004182);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 6rem;
+    }
+
+    .details-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient( to top, rgba(0,0,0,.65), rgba(0,0,0,.10), transparent);
+    }
+
+    .details-header {
+        position: absolute;
+        left: 50px;
+        bottom: 45px;
+        right: 50px;
+        z-index: 10;
+    }
+
+    /* CATEGORY */
+
+    .details-category {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255,255,255,.16);
+        backdrop-filter: blur(8px);
+        color: white;
+        padding: 11px 18px;
+        border-radius: 30px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        border: 1px solid rgba(255,255,255,.15);
+    }
+
+    /* TITLE */
+
+    .details-title {
+        font-size: 3.2rem;
+        font-weight: 800;
+        color: white;
+        line-height: 1.2;
+        margin-bottom: 20px;
+        max-width: 900px;
+    }
+
+    .details-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255,255,255,.12);
+        backdrop-filter: blur(8px);
+        padding: 10px 16px;
+        border-radius: 18px;
+        color: white;
+        font-weight: 600;
+        border: 1px solid rgba(255,255,255,.10);
+    }
+
+    /* BODY */
+
+    .details-body {
+        padding: 45px;
+    }
+
+    /* SECTIONS */
+
+    .details-section {
+        background: #fafcff;
+        border: 1px solid #edf2f7;
+        border-radius: 28px;
+        padding: 35px;
+        margin-bottom: 30px;
+    }
+
+    .details-section-title {
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: #1d1d1d;
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* DESCRIPTION */
+
+    .details-description {
+        font-size: 1.08rem;
+        line-height: 2;
+        color: #444;
+    }
+
+    /* SKILLS */
+
+    .skills-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .skill-badge {
+        background: white;
+        color: #0a66c2;
+        padding: 12px 18px;
+        border-radius: 18px;
+        font-weight: 700;
+        border: 1px solid #d9e8fa;
+        transition: .2s;
+    }
+
+        .skill-badge:hover {
+            transform: translateY(-2px);
+            background: #eef4fb;
+        }
+
+    /* LINKS */
+
+    .project-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .project-link-btn {
+        text-decoration: none;
+        background: linear-gradient(135deg, #0a66c2, #004182);
+        color: white;
+        padding: 14px 24px;
+        border-radius: 30px;
+        font-weight: 700;
+        transition: .2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .project-link-btn:hover {
+            opacity: .95;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+    /* ACTIONS */
+
+    .details-actions {
+        margin-top: 35px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .btn-custom {
+        border-radius: 30px;
+        padding: 13px 26px;
+        font-weight: 700;
+    }
+
+    /* SIDEBAR */
+
+    .sidebar-wrapper {
+        position: sticky;
+        top: 25px;
+    }
+
+    .contact-card {
+        background: white;
+        border-radius: 30px;
+        padding: 35px;
+        border: 1px solid #ececec;
+        box-shadow: 0 15px 40px rgba(0,0,0,.06);
+        overflow: hidden;
+        position: relative;
+    }
+
+        .contact-card::before {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(10,102,194,.05);
+            top: -100px;
+            right: -100px;
+        }
+
+    /* FOTO */
+
+    .contact-photo-wrapper {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .contact-photo {
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #eef4fb;
+        box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    }
+
+    .contact-name {
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: #1d1d1d;
+        margin-top: 18px;
+    }
+
+    .contact-course {
+        color: #0a66c2;
+        font-weight: 700;
+        margin-top: 6px;
+    }
+
+    /* INFO */
+
+    .contact-info {
+        margin-top: 30px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 14px 0;
+        border-bottom: 1px solid #f1f1f1;
+        color: #444;
+        word-break: break-word;
+    }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+    .contact-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: #eef4fb;
+        color: #0a66c2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    /* BUTTONS */
+
+    .contact-buttons {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .contact-button {
+        text-decoration: none;
+        background: #f7f9fc;
+        color: #1d1d1d;
+        border: 1px solid #e9ecef;
+        border-radius: 18px;
+        padding: 14px 18px;
+        font-weight: 700;
+        transition: .2s;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+        .contact-button:hover {
+            background: #0a66c2;
+            color: white;
+            border-color: #0a66c2;
+            transform: translateY(-2px);
+        }
+
+    .primary-contact {
+        background: linear-gradient(135deg, #0a66c2, #004182);
+        color: white;
+        border: none;
+    }
+
+        .primary-contact:hover {
+            color: white;
+            opacity: .95;
+        }
+
+    /* RESPONSIVO */
+
+    @@media (max-width: 992px) {
+
+        .details-title {
+            font-size: 2.4rem;
+        }
+
+        .details-image,
+        .details-placeholder {
+            height: 340px;
+        }
+
+        .details-header {
+            left: 30px;
+            right: 30px;
+            bottom: 30px;
+        }
+
+        .details-body {
+            padding: 30px;
+        }
+    }
+
+    @@media (max-width: 768px) {
+
+        .details-title {
+            font-size: 2rem;
+        }
+
+        .details-body {
+            padding: 22px;
+        }
+
+        .details-section {
+            padding: 24px;
+        }
+
+        .details-meta {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+</style>
+
+<div class="container details-container">
+
+    <div class="row g-4">
+
+        <!-- CONTEÚDO -->
+
+        <div class="col-lg-8">
+
+            <div class="details-hero">
+
+                <!-- CAPA -->
+
+                <div class="details-cover">
+
+                    @if (!string.IsNullOrEmpty(Model.ImagemUrl))
+                    {
+                        <img src="@Model.ImagemUrl"
+                             class="details-image"
+                             onerror="this.src='https://via.placeholder.com/1200x600?text=Projeto'" />
+                    }
+                    else
+                    {
+                        <div class="details-placeholder">
+
+                            <i class="bi bi-kanban-fill"></i>
+
+                        </div>
+                    }
+
+                    <div class="details-overlay"></div>
+
+                    <div class="details-header">
+
+                        <div class="details-category">
+
+                            <i class="bi bi-stars"></i>
+
+                            @Model.Categoria - @Html.DisplayFor(model => model.TipoAtividade)
+
+                        </div>
+
+                        <div class="details-title">
+
+                            @Model.Titulo
+
+                        </div>
+
+                        <div class="details-meta">
+
+                            <div class="meta-item">
+
+                                <i class="bi bi-calendar-event-fill"></i>
+
+                                @Model.Data.ToString("dd/MM/yyyy")
+
+                            </div>
+
+                            @if (Model.Estudante != null)
+                            {
+                                <div class="meta-item">
+
+                                    <i class="bi bi-person-fill"></i>
+
+                                    @Model.Estudante.Nome
+
+                                </div>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- CONTEÚDO -->
+
+                <div class="details-body">
+
+                    <!-- DESCRIÇÃO -->
+
+                    <div class="details-section">
+
+                        <div class="details-section-title">
+
+                            <i class="bi bi-file-text-fill"></i>
+
+                            Sobre o Projeto
+
+                        </div>
+
+                        <div class="details-description">
+
+                            @Model.Descricao
+
+                        </div>
+
+                    </div>
+
+                    <!-- COMPETÊNCIAS -->
+                    @if (!string.IsNullOrEmpty(Model.Competencias))
+                    {
+                        <div class="details-section">
+
+                            <div class="details-section-title">
+
+                                <i class="bi bi-lightning-charge-fill"></i>
+
+                                Competências Utilizadas
+
+                            </div>
+
+                            <div class="skills-wrapper">
+
+                                @foreach (var skill in Model.Competencias.Split(','))
+                                {
+                                    <span class="skill-badge">
+
+                                        @skill.Trim()
+
+                                    </span>
+                                }
+
+                            </div>
+
+                        </div>
+                    }
+
+                    <!-- LINKS -->
+                    @if (
+                                            !string.IsNullOrEmpty(Model.ProjetoUrl) ||
+                                            !string.IsNullOrEmpty(Model.CertificadoUrl))
+                    {
+                        <div class="details-section">
+
+                            <div class="details-section-title">
+
+                                <i class="bi bi-link-45deg"></i>
+
+                                Links Relacionados
+
+                            </div>
+
+                            <div class="project-links">
+
+                                @if (!string.IsNullOrEmpty(Model.ProjetoUrl))
+                                {
+                                    <a href="@Model.ProjetoUrl"
+                                           target="_blank"
+                                           class="project-link-btn">
+
+                                        <i class="bi bi-box-arrow-up-right"></i>
+
+                                        Ver Projeto
+
+                                    </a>
+                                }
+
+                                @if (!string.IsNullOrEmpty(Model.CertificadoUrl))
+                                {
+                                    <a href="@Model.CertificadoUrl"
+                                           target="_blank"
+                                           class="project-link-btn">
+
+                                        <i class="bi bi-award-fill"></i>
+
+                                        Certificado
+
+                                    </a>
+                                }
+
+                            </div>
+
+                        </div>
+                    }
+
+                    <!-- BOTÕES -->
+
+                    <div class="details-actions">
+
+                        @if (ehDono)
+                        {
+                            <a asp-action="Edit"
+                                   asp-route-id="@Model.Id"
+                                   class="btn btn-primary btn-custom">
+
+                                <i class="bi bi-pencil-square me-2"></i>
+
+                                Editar
+
+                            </a>
+
+                            <a asp-action="Delete"
+                                   asp-route-id="@Model.Id"
+                                   class="btn btn-outline-danger btn-custom">
+
+                                <i class="bi bi-trash-fill me-2"></i>
+
+                                Excluir
+
+                            </a>
+                        }
+
+                        <a asp-controller="Home"
+                               asp-action="Index"
+                               class="btn btn-outline-secondary btn-custom">
+
+                            <i class="bi bi-arrow-left me-2"></i>
+
+                            Voltar
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- SIDEBAR -->
+
+        <div class="col-lg-4">
+
+            @if (Model.Estudante != null)
+            {
+                <div class="sidebar-wrapper">
+
+                    <div class="contact-card">
+
+                        <!-- PERFIL -->
+
+                        <div class="contact-photo-wrapper">
+
+                            @if (!string.IsNullOrEmpty(Model.Estudante.FotoPerfil))
+                            {
+                                <img src="@Model.Estudante.FotoPerfil"
+                                     class="contact-photo" />
+                            }
+                            else
+                            {
+                                <img src="/images/default-user.png"
+                                     class="contact-photo" />
+                            }
+
+                            <div class="contact-name">
+
+                                @Model.Estudante.Nome
+
+                            </div>
+
+                            <div class="contact-course">
+
+                                @Model.Estudante.Curso
+
+                            </div>
+
+                        </div>
+
+                        <!-- INFO -->
+
+                        <div class="contact-info">
+
+                            @if (!string.IsNullOrEmpty(Model.Estudante.Email))
+                            {
+                                <div class="contact-item">
+
+                                    <div class="contact-icon">
+                                        <i class="bi bi-envelope-fill"></i>
+                                    </div>
+
+                                    <div>
+                                        @Model.Estudante.Email
+                                    </div>
+
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Estudante.Telefone))
+                            {
+                                <div class="contact-item">
+
+                                    <div class="contact-icon">
+                                        <i class="bi bi-telephone-fill"></i>
+                                    </div>
+
+                                    <div>
+                                        @Model.Estudante.Telefone
+                                    </div>
+
+                                </div>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Estudante.Cidade))
+                            {
+                                <div class="contact-item">
+
+                                    <div class="contact-icon">
+                                        <i class="bi bi-geo-alt-fill"></i>
+                                    </div>
+
+                                    <div>
+                                        @Model.Estudante.Cidade
+                                    </div>
+
+                                </div>
+                            }
+
+                        </div>
+
+                        <!-- BOTÕES -->
+
+                        <div class="contact-buttons">
+
+                            @if (!string.IsNullOrEmpty(Model.Estudante.Telefone))
+                            {
+                                <a href="https://wa.me/55@(Model.Estudante.Telefone.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", ""))"
+                                       target="_blank"
+                                       class="contact-button primary-contact">
+
+                                    <i class="bi bi-whatsapp"></i>
+
+                                    Conversar no WhatsApp
+
+                                </a>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Estudante.LinkedIn))
+                            {
+                                <a href="@Model.Estudante.LinkedIn"
+                                       target="_blank"
+                                       class="contact-button">
+
+                                    <i class="bi bi-linkedin"></i>
+
+                                    LinkedIn
+
+                                </a>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Estudante.GitHub))
+                            {
+                                <a href="@Model.Estudante.GitHub"
+                                       target="_blank"
+                                       class="contact-button">
+
+                                    <i class="bi bi-github"></i>
+
+                                    GitHub
+
+                                </a>
+                            }
+
+                            @if (!string.IsNullOrEmpty(Model.Estudante.Portfolio))
+                            {
+                                <a href="@Model.Estudante.Portfolio"
+                                       target="_blank"
+                                       class="contact-button">
+
+                                    <i class="bi bi-globe"></i>
+
+                                    Portfólio
+
+                                </a>
+                            }
+
+                            <a asp-controller="Estudantes"
+                                   asp-action="Perfil"
+                                   asp-route-id="@Model.Estudante.Id"
+                                   class="contact-button">
+
+                                <i class="bi bi-person-badge-fill"></i>
+
+                                Ver Perfil Completo
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>

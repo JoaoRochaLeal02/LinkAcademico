@@ -1,0 +1,279 @@
+﻿@model LinkAcademico.Models.Empresa
+
+@{
+    ViewData["Title"] = "Editar Empresa";
+}
+
+<style>
+
+    body {
+        background: #f4f7fb;
+    }
+
+    .company-container {
+        max-width: 900px;
+        margin: 40px auto;
+    }
+
+    .company-card {
+        background: white;
+        border-radius: 28px;
+        padding: 40px;
+        border: 1px solid #ececec;
+        box-shadow: 0 10px 30px rgba(0,0,0,.05);
+    }
+
+    .company-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #0a66c2;
+        margin-bottom: 30px;
+    }
+
+    .form-control {
+        border-radius: 14px;
+        border: 1px solid #dcdcdc;
+    }
+
+        .form-control:focus {
+            border-color: #0a66c2;
+            box-shadow: 0 0 0 .15rem rgba(10,102,194,.12);
+        }
+
+    .form-label {
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #0a66c2, #004182);
+        border: none;
+        border-radius: 30px;
+        height: 54px;
+        font-weight: 700;
+        width: 100%;
+    }
+
+    .preview-img {
+        width: 140px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 24px;
+        border: 5px solid #0a66c2;
+        margin-top: 15px;
+    }
+
+    textarea.form-control {
+        min-height: 130px;
+        resize: vertical;
+    }
+
+    .field-hint {
+        color: #667085;
+        font-size: .9rem;
+        margin-top: 6px;
+    }
+
+    .form-check-card {
+        background: #f7fafc;
+        border: 1px solid #d8e0ea;
+        border-radius: 14px;
+        padding: 16px;
+    }
+</style>
+
+<div class="company-container">
+
+    <div class="company-card">
+
+        <div class="company-title">
+            Editar Empresa
+        </div>
+
+        <form asp-action="Edit"
+              method="post"
+              enctype="multipart/form-data">
+
+            <input type="hidden"
+                   asp-for="Id" />
+
+            <!-- FOTO -->
+
+            <div class="mb-4">
+
+                <label class="form-label">
+                    Logo da Empresa
+                </label>
+
+                <input name="foto"
+                       type="file"
+                       class="form-control"
+                       accept="image/*"
+                       onchange="previewImagem(event)" />
+
+                @if (!string.IsNullOrEmpty(Model.FotoPerfil))
+                {
+                    <img src="@Model.FotoPerfil"
+                         id="preview"
+                         class="preview-img" />
+                }
+                else
+                {
+                    <img id="preview"
+                         class="preview-img"
+                         style="display:none;" />
+                }
+
+            </div>
+
+            <!-- NOME -->
+
+            <div class="mb-4">
+
+                <label asp-for="Nome"
+                       class="form-label">
+                </label>
+
+                <input asp-for="Nome"
+                       class="form-control" />
+
+            </div>
+
+            <!-- ÁREA -->
+
+            <div class="mb-4">
+
+                <label asp-for="AreaAtuacao"
+                       class="form-label">
+                </label>
+
+                <input asp-for="AreaAtuacao"
+                       class="form-control" />
+
+            </div>
+
+            <!-- EMAIL -->
+
+            <div class="mb-4">
+
+                <label asp-for="Email"
+                       class="form-label">
+                </label>
+
+                <input asp-for="Email"
+                       class="form-control" />
+
+            </div>
+
+            <!-- TECNOLOGIAS -->
+
+            <div class="mb-4">
+
+                <label asp-for="Tecnologias"
+                       class="form-label">
+                    Tecnologias ou áreas
+                </label>
+
+                <input asp-for="Tecnologias"
+                       class="form-control"
+                       placeholder="Ex: .NET, SQL, Suporte, UX" />
+
+                <div class="field-hint">
+                    Separe por vírgulas para aparecerem como marcadores no perfil.
+                </div>
+
+            </div>
+
+            <!-- EGRESSO EMPREENDEDOR -->
+
+            <div class="mb-4 form-check-card">
+
+                <div class="form-check">
+
+                    <input asp-for="EhEgressoEmpreendedor"
+                           class="form-check-input" />
+
+                    <label asp-for="EhEgressoEmpreendedor"
+                           class="form-check-label fw-bold">
+                        Sou egresso empreendedor da Universidade
+                    </label>
+
+                </div>
+
+                <div class="field-hint">
+                    Use essa marcação para destacar empresas fundadas ou conduzidas por egressos empreendedores.
+                </div>
+
+            </div>
+
+            <!-- DESCRIÇÃO -->
+
+            <div class="mb-4">
+
+                <label asp-for="Descricao"
+                       class="form-label">
+                    Sobre a empresa
+                </label>
+
+                <textarea asp-for="Descricao"
+                          class="form-control"
+                          placeholder="Conte o que a empresa faz, seu mercado, cultura e diferenciais."></textarea>
+
+            </div>
+
+            <!-- O QUE BUSCA -->
+
+            <div class="mb-4">
+
+                <label asp-for="OQueBusca"
+                       class="form-label">
+                    O que buscamos nos estudantes
+                </label>
+
+                <textarea asp-for="OQueBusca"
+                          class="form-control"
+                          placeholder="Ex: estudantes com vontade de aprender, boa comunicação e interesse em tecnologia."></textarea>
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary btn-save">
+
+                Salvar Alterações
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script>
+
+        function previewImagem(event) {
+
+            var input = event.target;
+
+            var preview =
+                document.getElementById('preview');
+
+            if (input.files && input.files[0]) {
+
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+
+                    preview.src = e.target.result;
+
+                    preview.style.display = "block";
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+    </script>
+}

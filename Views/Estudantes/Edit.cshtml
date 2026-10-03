@@ -1,0 +1,328 @@
+﻿@model LinkAcademico.Models.Estudante
+
+@{
+    ViewData["Title"] = "Editar Perfil";
+}
+
+<style>
+
+    body {
+        background: #f4f7fb;
+    }
+
+    .edit-container {
+        max-width: 950px;
+        margin: 50px auto;
+    }
+
+    .edit-card {
+        background: white;
+        border-radius: 30px;
+        padding: 40px;
+        border: 1px solid #ececec;
+        box-shadow: 0 15px 40px rgba(0,0,0,.08);
+    }
+
+    .edit-title {
+        font-size: 2.2rem;
+        font-weight: 800;
+        color: #0a66c2;
+        margin-bottom: 10px;
+    }
+
+    .edit-subtitle {
+        color: #666;
+        margin-bottom: 35px;
+    }
+
+    .form-control {
+        border-radius: 14px;
+        border: 1px solid #dcdcdc;
+        min-height: 54px;
+    }
+
+        .form-control:focus {
+            border-color: #0a66c2;
+            box-shadow: 0 0 0 .15rem rgba(10,102,194,.12);
+        }
+
+    textarea.form-control {
+        height: auto;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #0a66c2, #004182);
+        border: none;
+        border-radius: 30px;
+        height: 54px;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: .2s;
+    }
+
+        .btn-save:hover {
+            opacity: .95;
+            transform: translateY(-1px);
+        }
+
+    .foto-preview {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #e9ecef;
+        margin-top: 20px;
+        display: block;
+    }
+
+</style>
+
+<div class="container edit-container">
+
+    <div class="edit-card">
+
+        <div class="edit-title">
+            Editar Perfil
+        </div>
+
+        <div class="edit-subtitle">
+            Atualize suas informações acadêmicas e profissionais.
+        </div>
+
+        <form asp-action="Edit"
+              method="post"
+              enctype="multipart/form-data">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-4">
+            </div>
+
+            <div class="row">
+
+                <!-- NOME -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Nome"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Nome"
+                           class="form-control" />
+
+                </div>
+
+                <!-- CURSO -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Curso"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Curso"
+                           class="form-control" />
+
+                </div>
+
+                <!-- EMAIL -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Email"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Email"
+                           class="form-control" />
+
+                </div>
+
+                <!-- TELEFONE -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Telefone"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Telefone"
+                           class="form-control" />
+
+                </div>
+
+                <!-- FOTO PERFIL -->
+
+                <div class="col-12 mb-4">
+
+                    <label class="form-label">
+
+                        Alterar Foto de Perfil
+
+                    </label>
+
+                    <input name="FotoUpload"
+                           type="file"
+                           accept="image/*"
+                           class="form-control"
+                           id="fotoInput" />
+
+                    @if (!string.IsNullOrEmpty(Model.FotoPerfil))
+                    {
+                        <img src="@Model.FotoPerfil"
+                             id="previewFoto"
+                             class="foto-preview" />
+                    }
+                    else
+                    {
+                        <img id="previewFoto"
+                             class="foto-preview"
+                             style="display:none;" />
+                    }
+
+                </div>
+
+                <!-- CIDADE -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Cidade"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Cidade"
+                           class="form-control" />
+
+                </div>
+
+                <!-- PERÍODO -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Periodo"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Periodo"
+                           class="form-control" />
+
+                </div>
+
+                <!-- HABILIDADES -->
+
+                <div class="col-12 mb-4">
+
+                    <label asp-for="Habilidades"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Habilidades"
+                           class="form-control" />
+
+                </div>
+
+                <!-- BIO -->
+
+                <div class="col-12 mb-4">
+
+                    <label asp-for="Bio"
+                           class="form-label">
+                    </label>
+
+                    <textarea asp-for="Bio"
+                              rows="5"
+                              class="form-control"></textarea>
+
+                </div>
+
+                <!-- GITHUB -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label asp-for="GitHub"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="GitHub"
+                           class="form-control" />
+
+                </div>
+
+                <!-- LINKEDIN -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label asp-for="LinkedIn"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="LinkedIn"
+                           class="form-control" />
+
+                </div>
+
+                <!-- PORTFÓLIO -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label asp-for="Portfolio"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Portfolio"
+                           class="form-control" />
+
+                </div>
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary btn-save w-100">
+
+                Atualizar Perfil
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        const fotoInput =
+            document.getElementById("fotoInput");
+
+        const previewFoto =
+            document.getElementById("previewFoto");
+
+        fotoInput.addEventListener("change", function () {
+
+            const arquivo = this.files[0];
+
+            if (arquivo)
+            {
+                previewFoto.src =
+                    URL.createObjectURL(arquivo);
+
+                previewFoto.style.display = "block";
+            }
+
+        });
+
+    </script>
+}

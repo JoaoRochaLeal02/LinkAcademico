@@ -1,0 +1,238 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-select:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.12rem #fff, 0 0 0 0.25rem rgba(23, 105, 170, .28);
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 32px;
+}
+
+a {
+    color: #1769aa;
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 700;
+    min-height: 36px;
+    padding-top: .42rem;
+    padding-bottom: .42rem;
+}
+
+.btn-primary {
+    background-color: #0f426d;
+    border-color: #0f426d;
+}
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+        background-color: #1769aa;
+        border-color: #1769aa;
+    }
+
+.btn-outline-primary {
+    color: #0f426d;
+    border-color: #b9c7d6;
+}
+
+    .btn-outline-primary:hover,
+    .btn-outline-primary:focus {
+        background-color: #0f426d;
+        border-color: #0f426d;
+    }
+
+.form-control,
+.form-select {
+    border-color: #d8e0ea;
+    border-radius: 8px;
+    min-height: 38px;
+}
+
+.card,
+.modal-content,
+.dropdown-menu {
+    border-color: #d8e0ea;
+    border-radius: 8px;
+    box-shadow: 0 14px 36px rgba(23, 33, 47, .08);
+}
+
+.alert,
+.list-group-item,
+.input-group-text {
+    border-color: #d8e0ea;
+}
+
+.alert {
+    border-radius: 8px;
+}
+
+@media (max-width: 576px) {
+    body {
+        margin-bottom: 18px;
+    }
+
+    .container,
+    .container-fluid {
+        --bs-gutter-x: 1.25rem;
+    }
+
+    .btn {
+        white-space: normal;
+    }
+}
+
+/* Compactacao visual global */
+.main-wrapper {
+    margin-top: 20px !important;
+}
+
+.container,
+.container-fluid {
+    --bs-gutter-x: 1.5rem;
+}
+
+.row {
+    --bs-gutter-x: 1.25rem;
+}
+
+.mt-5 {
+    margin-top: 2rem !important;
+}
+
+.mb-5 {
+    margin-bottom: 2rem !important;
+}
+
+.py-5 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+}
+
+.px-4 {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+}
+
+.card-body {
+    padding: 1rem !important;
+}
+
+.table > :not(caption) > * > * {
+    padding: .55rem .65rem;
+}
+
+.hero-section,
+.search-hero,
+.create-hero,
+.exp-hero,
+.profile-hero {
+    border-radius: 10px !important;
+    padding: 34px 32px !important;
+    margin-bottom: 22px !important;
+}
+
+.landing-card,
+.student-card,
+.edit-card,
+.exp-card,
+.preview-card,
+.stats-card,
+.profile-card,
+.company-form-card,
+.right-card,
+.home-feed-card,
+.home-job-card,
+.job-card,
+.experience-card,
+.sidebar-card {
+    border-radius: 8px !important;
+}
+
+.student-card,
+.edit-card,
+.exp-card,
+.preview-card,
+.profile-card,
+.company-form-card {
+    padding: 26px !important;
+}
+
+.right-card,
+.sidebar-content,
+.home-feed-content,
+.home-job-card,
+.job-card,
+.experience-card,
+.stats-card {
+    padding: 16px !important;
+}
+
+.section-title,
+.card-title,
+.right-title {
+    margin-bottom: 14px !important;
+}
+
+.home-feed-grid,
+.home-jobs-grid {
+    gap: 14px !important;
+}
+
+.home-feed-image,
+.home-feed-placeholder {
+    height: 150px !important;
+}
+
+.hero-title,
+.exp-hero-title {
+    margin-bottom: 10px !important;
+}
+
+.hero-buttons,
+.hero-tags,
+.hero-actions,
+.sidebar-actions {
+    margin-top: 18px !important;
+}
+
+@media (max-width: 768px) {
+    .hero-section,
+    .search-hero,
+    .create-hero,
+    .exp-hero,
+    .profile-hero {
+        padding: 28px 20px !important;
+    }
+
+    .student-card,
+    .edit-card,
+    .exp-card,
+    .preview-card,
+    .profile-card,
+    .company-form-card {
+        padding: 20px !important;
+    }
+}
+
+.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}

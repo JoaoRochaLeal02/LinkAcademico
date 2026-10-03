@@ -1,0 +1,409 @@
+@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Entrar";
+}
+
+<style>
+
+    body {
+        background: #f5f7fa;
+        overflow-x: hidden;
+    }
+
+    .auth-shell {
+        min-height: calc(100vh - 72px);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 500px;
+        background: #f5f7fa;
+    }
+
+    .auth-visual {
+        min-height: calc(100vh - 72px);
+        background: linear-gradient(90deg, rgba(15, 29, 45, .88), rgba(15, 66, 109, .72)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        display: flex;
+        align-items: flex-end;
+        padding: 58px;
+        position: relative;
+    }
+
+    .auth-copy {
+        max-width: 680px;
+    }
+
+    .brand-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 15px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.12);
+        border: 1px solid rgba(255,255,255,.22);
+        backdrop-filter: blur(12px);
+        font-weight: 800;
+        margin-bottom: 22px;
+    }
+
+    .brand-mark {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: #fff;
+        color: #0f426d;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: .75rem;
+        letter-spacing: .04em;
+        font-weight: 900;
+    }
+
+    .auth-copy h1 {
+        font-size: clamp(2.4rem, 4.8vw, 4.8rem);
+        line-height: 1.04;
+        font-weight: 900;
+        margin-bottom: 18px;
+    }
+
+    .auth-copy p {
+        color: rgba(255,255,255,.86);
+        font-size: 1.08rem;
+        line-height: 1.75;
+        max-width: 620px;
+        margin-bottom: 30px;
+    }
+
+    .auth-stats {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .stat-card {
+        min-width: 128px;
+        padding: 15px 16px;
+        border-radius: 12px;
+        background: rgba(255,255,255,.12);
+        border: 1px solid rgba(255,255,255,.20);
+        backdrop-filter: blur(12px);
+    }
+
+    .stat-card strong {
+        display: block;
+        font-size: 1.45rem;
+        line-height: 1;
+        margin-bottom: 6px;
+    }
+
+    .stat-card span {
+        color: rgba(255,255,255,.78);
+        font-size: .9rem;
+    }
+
+    .auth-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 36px;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 420px;
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 14px;
+        box-shadow: 0 18px 42px rgba(23, 33, 47, .10);
+        padding: 34px;
+    }
+
+    .login-eyebrow {
+        color: #15836d;
+        font-size: .82rem;
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+
+    .login-title {
+        font-size: 2rem;
+        line-height: 1.15;
+        font-weight: 900;
+        color: #17212f;
+        margin-bottom: 10px;
+    }
+
+    .login-subtitle {
+        color: #667085;
+        line-height: 1.65;
+        margin-bottom: 28px;
+    }
+
+    .form-floating > .form-control {
+        height: 58px;
+        border-radius: 10px;
+        border: 1px solid #d8e0ea;
+        background: #fff;
+    }
+
+    .form-floating > label {
+        color: #667085;
+    }
+
+    .form-control:focus {
+        border-color: #1769aa;
+        box-shadow: 0 0 0 .2rem rgba(23,105,170,.12);
+    }
+
+    .remember-box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin: 18px 0 24px;
+    }
+
+    .form-check-label {
+        color: #667085;
+        font-size: .94rem;
+    }
+
+    .forgot-link {
+        color: #0f426d;
+        text-decoration: none;
+        font-weight: 800;
+        font-size: .94rem;
+        white-space: nowrap;
+    }
+
+    .forgot-link:hover {
+        color: #1769aa;
+        text-decoration: underline;
+    }
+
+    .btn-login-custom {
+        min-height: 54px;
+        border: none;
+        border-radius: 10px;
+        background: #0f426d;
+        font-weight: 800;
+        transition: .2s;
+    }
+
+    .btn-login-custom:hover,
+    .btn-login-custom:focus {
+        background: #1769aa;
+        transform: translateY(-1px);
+        box-shadow: 0 12px 26px rgba(15,66,109,.18);
+    }
+
+    .login-footer {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 24px;
+        color: #667085;
+    }
+
+    .login-footer a {
+        color: #0f426d;
+        text-decoration: none;
+        font-weight: 900;
+    }
+
+    .login-footer a:hover {
+        color: #1769aa;
+        text-decoration: underline;
+    }
+
+    .text-danger {
+        font-size: .88rem;
+    }
+
+    @@media (max-width: 992px) {
+
+        .auth-shell {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-visual {
+            min-height: 360px;
+            align-items: center;
+            padding: 36px 24px;
+        }
+
+        .auth-panel {
+            padding: 28px 18px 42px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+
+        .auth-copy h1 {
+            font-size: 2.25rem;
+        }
+
+        .login-card {
+            padding: 26px 20px;
+        }
+
+        .remember-box {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+
+</style>
+
+<div class="auth-shell">
+
+    <section class="auth-visual">
+
+        <div class="auth-copy">
+
+            <div class="brand-badge">
+                <span class="brand-mark">LA</span>
+                Link Acadêmico
+            </div>
+
+            <h1>
+                Entre e continue sua jornada profissional.
+            </h1>
+
+            <p>
+                Acesse seu perfil, publique experiências e acompanhe oportunidades
+                conectando estudantes e empresas em um só lugar.
+            </p>
+
+            <div class="auth-stats">
+
+                <div class="stat-card">
+                    <strong>+300</strong>
+                    <span>Estudantes</span>
+                </div>
+
+                <div class="stat-card">
+                    <strong>+50</strong>
+                    <span>Empresas</span>
+                </div>
+
+                <div class="stat-card">
+                    <strong>+120</strong>
+                    <span>Projetos</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="auth-panel">
+
+        <div class="login-card">
+
+            <div class="login-eyebrow">
+                Acesso seguro
+            </div>
+
+            <div class="login-title">
+                Entrar na conta
+            </div>
+
+            <div class="login-subtitle">
+                Use seu e-mail e senha para continuar no Link Acadêmico.
+            </div>
+
+            <form id="account"
+                  method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="form-floating mb-3">
+
+                    <input asp-for="Input.Email"
+                           class="form-control"
+                           autocomplete="username"
+                           placeholder="nome@exemplo.com" />
+
+                    <label asp-for="Input.Email">
+                        E-mail
+                    </label>
+
+                    <span asp-validation-for="Input.Email"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="form-floating mb-3">
+
+                    <input asp-for="Input.Password"
+                           class="form-control"
+                           autocomplete="current-password"
+                           placeholder="Senha" />
+
+                    <label asp-for="Input.Password">
+                        Senha
+                    </label>
+
+                    <span asp-validation-for="Input.Password"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <div class="remember-box">
+
+                    <div class="form-check">
+
+                        <input class="form-check-input"
+                               asp-for="Input.RememberMe" />
+
+                        <label class="form-check-label"
+                               asp-for="Input.RememberMe">
+                            Lembrar de mim
+                        </label>
+
+                    </div>
+
+                    <a id="forgot-password"
+                       asp-page="./ForgotPassword"
+                       class="forgot-link">
+                        Esqueceu sua senha?
+                    </a>
+
+                </div>
+
+                <button id="login-submit"
+                        type="submit"
+                        class="btn btn-primary btn-login-custom w-100">
+                    Entrar
+                </button>
+
+                <div class="login-footer">
+                    <span>Não possui conta?</span>
+                    <a asp-page="./Register"
+                       asp-route-returnUrl="@Model.ReturnUrl">
+                        Criar conta
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </section>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

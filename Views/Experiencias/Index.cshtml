@@ -1,0 +1,453 @@
+@model IEnumerable<LinkAcademico.Models.Experiencia>
+
+@{
+    ViewData["Title"] = "Experiências";
+
+    var totalExperiencias = Model.Count();
+    var totalComCompetencias = Model.Count(x => !string.IsNullOrWhiteSpace(x.Competencias));
+    var totalComProjeto = Model.Count(x => !string.IsNullOrWhiteSpace(x.ProjetoUrl));
+}
+
+<style>
+    .experiences-header {
+        background: linear-gradient(90deg, rgba(15,29,45,.90), rgba(15,66,109,.78)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        border-radius: 16px;
+        color: #fff;
+        padding: 54px;
+        margin-bottom: 24px;
+        box-shadow: 0 18px 42px rgba(23,33,47,.14);
+    }
+
+    .experiences-header h1 {
+        font-weight: 900;
+        margin-bottom: 12px;
+    }
+
+    .experiences-header p {
+        color: rgba(255,255,255,.86);
+        max-width: 720px;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .experiences-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 24px;
+    }
+
+    .experiences-summary {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 26px;
+        box-shadow: 0 10px 26px rgba(23,33,47,.06);
+    }
+
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 12px;
+    }
+
+    .summary-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        background: #f7f9fc;
+        border: 1px solid #edf1f6;
+        border-radius: 10px;
+    }
+
+    .summary-icon {
+        width: 42px;
+        height: 42px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 42px;
+        border-radius: 10px;
+        background: #eaf2fa;
+        color: #0f426d;
+        font-size: 1.1rem;
+    }
+
+    .summary-value {
+        color: #17212f;
+        font-size: 1.35rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .summary-label {
+        color: #667085;
+        font-size: .88rem;
+        margin-top: 4px;
+    }
+
+    .experiences-section {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .experiences-section h2 {
+        color: #17212f;
+        font-size: 1.55rem;
+        font-weight: 900;
+        margin: 0;
+    }
+
+    .experiences-section p {
+        color: #667085;
+        margin: 4px 0 0 0;
+    }
+
+    .experiences-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+    }
+
+    .experience-card {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 12px;
+        box-shadow: 0 10px 26px rgba(23,33,47,.06);
+        transition: .2s;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .experience-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 32px rgba(23,33,47,.10);
+    }
+
+    .experience-media {
+        height: 150px;
+        background: linear-gradient(135deg, #0f426d, #1769aa);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .experience-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .experience-placeholder {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,.92);
+        font-size: 2.4rem;
+    }
+
+    .experience-body {
+        padding: 22px;
+    }
+
+    .experience-company {
+        color: #15836d;
+        font-weight: 900;
+        font-size: .88rem;
+        margin-bottom: 8px;
+    }
+
+    .experience-title {
+        color: #17212f;
+        font-weight: 900;
+        font-size: 1.3rem;
+        line-height: 1.35;
+        margin-bottom: 12px;
+    }
+
+    .experience-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .experience-pill {
+        background: #f0f4f8;
+        color: #0f426d;
+        border-radius: 999px;
+        padding: 7px 11px;
+        font-size: .82rem;
+        font-weight: 800;
+    }
+
+    .experience-desc {
+        color: #667085;
+        line-height: 1.65;
+        margin-bottom: 16px;
+    }
+
+    .experience-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 18px;
+    }
+
+    .skill-pill {
+        background: #eef7f4;
+        color: #15836d;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: .78rem;
+        font-weight: 800;
+    }
+
+    .experience-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding-top: 16px;
+        border-top: 1px solid #edf1f6;
+    }
+
+    .experience-links {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .icon-action {
+        width: 38px;
+        height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        border: 1px solid #b9c7d6;
+        color: #0f426d;
+        background: #fff;
+        text-decoration: none;
+        transition: .2s;
+    }
+
+    .icon-action:hover {
+        background: #0f426d;
+        border-color: #0f426d;
+        color: #fff;
+    }
+
+    .empty-state {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 12px;
+        padding: 46px;
+        text-align: center;
+        color: #667085;
+        box-shadow: 0 10px 26px rgba(23,33,47,.06);
+    }
+
+    .empty-state h4 {
+        color: #17212f;
+        font-weight: 900;
+    }
+
+    @@media (max-width: 768px) {
+        .experiences-header {
+            padding: 34px 24px;
+        }
+
+        .experience-footer {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="experiences-header">
+    <h1>Minhas experiências</h1>
+    <p>
+        Organize seus projetos, certificações e vivências acadêmicas em um portfólio
+        claro para destacar sua trajetória profissional.
+    </p>
+
+    <div class="experiences-actions">
+        <a asp-action="Create" class="btn btn-light">
+            <i class="bi bi-plus-circle me-1"></i>
+            Nova experiência
+        </a>
+
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-light">
+            <i class="bi bi-house me-1"></i>
+            Voltar para home
+        </a>
+    </div>
+</div>
+
+@if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success">@TempData["Sucesso"]</div>
+}
+
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger">@TempData["Erro"]</div>
+}
+
+<div class="experiences-summary">
+    <div class="summary-grid">
+        <div class="summary-item">
+            <span class="summary-icon"><i class="bi bi-kanban"></i></span>
+            <span>
+                <span class="summary-value d-block">@totalExperiencias</span>
+                <span class="summary-label d-block">experiência(s) cadastrada(s)</span>
+            </span>
+        </div>
+
+        <div class="summary-item">
+            <span class="summary-icon"><i class="bi bi-lightning-charge"></i></span>
+            <span>
+                <span class="summary-value d-block">@totalComCompetencias</span>
+                <span class="summary-label d-block">com competências</span>
+            </span>
+        </div>
+
+        <div class="summary-item">
+            <span class="summary-icon"><i class="bi bi-box-arrow-up-right"></i></span>
+            <span>
+                <span class="summary-value d-block">@totalComProjeto</span>
+                <span class="summary-label d-block">com link de projeto</span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="experiences-section">
+    <div>
+        <h2>Portfólio acadêmico</h2>
+        <p>Revise, edite e compartilhe suas experiências mais importantes.</p>
+    </div>
+
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>
+        Adicionar
+    </a>
+</div>
+
+@if (Model.Any())
+{
+    <div class="experiences-grid">
+        @foreach (var item in Model)
+        {
+            <article class="experience-card">
+                <div class="experience-media">
+                    @if (!string.IsNullOrWhiteSpace(item.ImagemUrl))
+                    {
+                        <img src="@item.ImagemUrl"
+                             alt="Imagem da experiência @item.Titulo"
+                             onerror="this.parentElement.innerHTML='<div class=&quot;experience-placeholder&quot;><i class=&quot;bi bi-kanban&quot;></i></div>'" />
+                    }
+                    else
+                    {
+                        <div class="experience-placeholder">
+                            <i class="bi bi-kanban"></i>
+                        </div>
+                    }
+                </div>
+
+                <div class="experience-body">
+                    <div class="experience-company">
+                        @(string.IsNullOrWhiteSpace(item.Instituicao) ? "Experiência acadêmica" : item.Instituicao)
+                    </div>
+
+                    <div class="experience-title">
+                        @item.Titulo
+                    </div>
+
+                    <div class="experience-meta">
+                        <span class="experience-pill">@Html.DisplayFor(modelItem => item.Categoria)</span>
+                        <span class="experience-pill">@Html.DisplayFor(modelItem => item.TipoAtividade)</span>
+                        <span class="experience-pill">@item.Data.ToString("dd/MM/yyyy")</span>
+                    </div>
+
+                    <p class="experience-desc">
+                        @(item.Descricao.Length > 150
+                            ? item.Descricao.Substring(0, 150) + "..."
+                            : item.Descricao)
+                    </p>
+
+                    @if (!string.IsNullOrWhiteSpace(item.Competencias))
+                    {
+                        <div class="experience-skills">
+                            @foreach (var skill in item.Competencias.Split(',', StringSplitOptions.RemoveEmptyEntries).Take(4))
+                            {
+                                <span class="skill-pill">@skill.Trim()</span>
+                            }
+                        </div>
+                    }
+
+                    <div class="experience-footer">
+                        <span class="text-muted small">
+                            @(item.Estudante?.Nome ?? "Seu perfil")
+                        </span>
+
+                        <div class="experience-links">
+                            @if (!string.IsNullOrWhiteSpace(item.ProjetoUrl))
+                            {
+                                <a href="@item.ProjetoUrl"
+                                   target="_blank"
+                                   rel="noopener"
+                                   class="icon-action"
+                                   title="Abrir projeto">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            }
+
+                            <a asp-action="Details"
+                               asp-route-id="@item.Id"
+                               class="btn btn-outline-primary">
+                                Ver experiência
+                            </a>
+
+                            <a asp-action="Edit"
+                               asp-route-id="@item.Id"
+                               class="icon-action"
+                               title="Editar">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@item.Id"
+                               class="icon-action"
+                               title="Excluir">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        }
+    </div>
+}
+else
+{
+    <div class="empty-state">
+        <h4>Nenhuma experiência cadastrada</h4>
+        <p>Crie sua primeira experiência acadêmica, projeto ou certificação para fortalecer seu portfólio.</p>
+        <a asp-action="Create" class="btn btn-primary mt-2">
+            <i class="bi bi-plus-circle me-1"></i>
+            Criar primeira experiência
+        </a>
+    </div>
+}

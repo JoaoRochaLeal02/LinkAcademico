@@ -1,0 +1,76 @@
+@model LinkAcademico.Models.Vaga
+
+@{
+    ViewData["Title"] = "Candidatos";
+}
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <div>
+        <h1 class="fw-bold mb-1">Candidatos</h1>
+        <p class="text-muted mb-0">@Model.Titulo</p>
+    </div>
+
+    <a asp-action="Minhas" class="btn btn-outline-secondary">
+        Voltar
+    </a>
+</div>
+
+@if (Model.Candidaturas.Any())
+{
+    <div class="row g-3">
+        @foreach (var candidatura in Model.Candidaturas.OrderByDescending(c => c.DataCandidatura))
+        {
+            var estudante = candidatura.Estudante;
+
+            <div class="col-lg-6">
+                <div class="bg-white border rounded-3 shadow-sm p-4 h-100">
+                    <div class="d-flex justify-content-between gap-3 mb-3">
+                        <div>
+                            <h5 class="fw-bold mb-1">@estudante?.Nome</h5>
+                            <div class="text-muted">@estudante?.Curso</div>
+                        </div>
+                        <span class="badge bg-light text-dark h-25">
+                            @candidatura.DataCandidatura.ToString("dd/MM/yyyy")
+                        </span>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(estudante?.Habilidades))
+                    {
+                        <div class="mb-3">
+                            @foreach (var skill in estudante.Habilidades.Split(',').Take(6))
+                            {
+                                <span class="badge rounded-pill text-bg-primary me-1 mb-1">
+                                    @skill.Trim()
+                                </span>
+                            }
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(candidatura.Mensagem))
+                    {
+                        <p class="text-muted">
+                            @candidatura.Mensagem
+                        </p>
+                    }
+
+                    @if (estudante != null)
+                    {
+                        <a asp-controller="Estudantes"
+                           asp-action="Details"
+                           asp-route-id="@estudante.Id"
+                           class="btn btn-outline-primary">
+                            Ver perfil
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="bg-white border rounded-3 shadow-sm p-5 text-center">
+        <h4 class="fw-bold">Nenhum candidato ainda</h4>
+        <p class="text-muted mb-0">Quando estudantes compatíveis se candidatarem, eles aparecerão aqui.</p>
+    </div>
+}

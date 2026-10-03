@@ -1,0 +1,83 @@
+@model IEnumerable<LinkAcademico.Models.Vaga>
+
+@{
+    ViewData["Title"] = "Minhas vagas";
+}
+
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <div>
+        <h1 class="fw-black fw-bold mb-1">Minhas vagas</h1>
+        <p class="text-muted mb-0">Gerencie oportunidades publicadas pela sua empresa.</p>
+    </div>
+
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle me-1"></i>
+        Nova vaga
+    </a>
+</div>
+
+@if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success">@TempData["Sucesso"]</div>
+}
+
+@if (Model.Any())
+{
+    <div class="table-responsive bg-white border rounded-3 shadow-sm">
+        <table class="table align-middle mb-0">
+            <thead>
+                <tr>
+                    <th>Vaga</th>
+                    <th>Publicação</th>
+                    <th>Status</th>
+                    <th>Candidatos</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var vaga in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@vaga.Titulo</strong>
+                            <div class="text-muted small">@vaga.ModeloTrabalho @vaga.TipoVaga</div>
+                        </td>
+                        <td>@vaga.DataPublicacao.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (vaga.Ativa)
+                            {
+                                <span class="badge bg-success">Ativa</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Inativa</span>
+                            }
+                        </td>
+                        <td>@vaga.Candidaturas.Count</td>
+                        <td class="text-end">
+                            <div class="btn-group">
+                                <a asp-action="Candidatos" asp-route-id="@vaga.Id" class="btn btn-sm btn-outline-primary">
+                                    Candidatos
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@vaga.Id" class="btn btn-sm btn-outline-secondary">
+                                    Editar
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@vaga.Id" class="btn btn-sm btn-outline-danger">
+                                    Excluir
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="bg-white border rounded-3 shadow-sm p-5 text-center">
+        <h4 class="fw-bold">Nenhuma vaga publicada</h4>
+        <p class="text-muted">Crie sua primeira vaga para receber candidaturas de estudantes.</p>
+        <a asp-action="Create" class="btn btn-primary">Publicar vaga</a>
+    </div>
+}

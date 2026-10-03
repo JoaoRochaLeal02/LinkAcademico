@@ -1,0 +1,846 @@
+@model LinkAcademico.Models.Estudante
+
+@{
+    ViewData["Title"] = "Perfil do Estudante";
+
+    bool ehDono =
+        ViewBag.EhDono != null &&
+        (bool)ViewBag.EhDono;
+
+    var experiencias = Model.Experiencias ?? new List<LinkAcademico.Models.Experiencia>();
+    var experienciasRecentes = experiencias
+        .OrderByDescending(e => e.Data)
+        .Take(3)
+        .ToList();
+    var habilidades = string.IsNullOrWhiteSpace(Model.Habilidades)
+        ? Array.Empty<string>()
+        : Model.Habilidades
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(h => !string.IsNullOrWhiteSpace(h))
+            .ToArray();
+    var linksPreenchidos = new[]
+    {
+        !string.IsNullOrWhiteSpace(Model.LinkedIn),
+        !string.IsNullOrWhiteSpace(Model.GitHub),
+        !string.IsNullOrWhiteSpace(Model.Portfolio)
+    }.Count(item => item);
+    var perfilItens = new[]
+    {
+        !string.IsNullOrWhiteSpace(Model.FotoPerfil),
+        !string.IsNullOrWhiteSpace(Model.Bio),
+        habilidades.Any(),
+        experiencias.Any(),
+        !string.IsNullOrWhiteSpace(Model.Telefone),
+        linksPreenchidos > 0
+    };
+    var perfilCompleto = (int)Math.Round(perfilItens.Count(item => item) * 100.0 / perfilItens.Length);
+    var telefoneLimpo = string.IsNullOrWhiteSpace(Model.Telefone)
+        ? string.Empty
+        : Model.Telefone
+            .Replace(" ", "")
+            .Replace("-", "")
+            .Replace("(", "")
+            .Replace(")", "");
+}
+
+<style>
+    body {
+        background: #f4f7fb;
+    }
+
+    .student-profile {
+        max-width: 1220px;
+        margin: 28px auto 56px;
+    }
+
+    .profile-hero {
+        min-height: 310px;
+        border-radius: 8px;
+        background: linear-gradient(120deg, rgba(15,66,109,.96), rgba(21,131,109,.86)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?q=80&w=1400&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        padding: 34px;
+        display: flex;
+        align-items: flex-end;
+        box-shadow: 0 18px 38px rgba(23,33,47,.14);
+    }
+
+    .hero-content {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: end;
+    }
+
+    .student-photo {
+        width: 132px;
+        height: 132px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1769aa, #15836d);
+        border: 4px solid rgba(255,255,255,.92);
+        box-shadow: 0 14px 32px rgba(0,0,0,.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+    }
+
+        .student-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .student-photo i {
+            color: #fff;
+            font-size: 3.3rem;
+        }
+
+    .student-name {
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        font-weight: 900;
+        line-height: 1.05;
+        margin: 0 0 10px;
+        word-break: break-word;
+    }
+
+    .student-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .meta-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(255,255,255,.22);
+        background: rgba(255,255,255,.13);
+        color: #fff;
+        border-radius: 8px;
+        padding: 9px 12px;
+        font-weight: 800;
+        backdrop-filter: blur(12px);
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+        .hero-actions .btn {
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+    .profile-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 22px;
+        margin-top: 22px;
+    }
+
+    .profile-panel,
+    .side-panel {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 8px;
+        box-shadow: 0 12px 30px rgba(23,33,47,.06);
+    }
+
+    .profile-panel {
+        padding: 28px;
+        margin-bottom: 22px;
+    }
+
+    .side-panel {
+        padding: 22px;
+        margin-bottom: 18px;
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .section-title {
+        color: #17212f;
+        font-size: 1.25rem;
+        font-weight: 900;
+        margin: 0;
+    }
+
+    .section-kicker {
+        color: #667085;
+        font-weight: 700;
+        font-size: .9rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .stat-box {
+        background: #f7fafc;
+        border: 1px solid #e3eaf2;
+        border-radius: 8px;
+        padding: 18px;
+    }
+
+    .stat-number {
+        color: #0f426d;
+        font-size: 1.85rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .stat-label {
+        color: #667085;
+        margin-top: 8px;
+        font-weight: 700;
+    }
+
+    .content-text {
+        color: #5d6b7a;
+        line-height: 1.8;
+        white-space: pre-line;
+    }
+
+    .highlight-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .highlight-item {
+        border: 1px solid #e3eaf2;
+        border-radius: 8px;
+        padding: 18px;
+        background: #fbfdff;
+    }
+
+    .highlight-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 8px;
+        background: #edf7f4;
+        color: #116450;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+        font-size: 1.15rem;
+    }
+
+    .highlight-title {
+        color: #17212f;
+        font-weight: 900;
+        margin-bottom: 6px;
+    }
+
+    .highlight-copy {
+        color: #667085;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .experience-list {
+        display: grid;
+        gap: 12px;
+    }
+
+    .experience-card {
+        display: grid;
+        grid-template-columns: 84px minmax(0, 1fr) auto;
+        gap: 16px;
+        align-items: center;
+        border: 1px solid #e3eaf2;
+        border-radius: 8px;
+        padding: 16px;
+        color: inherit;
+        text-decoration: none;
+        transition: .2s ease;
+    }
+
+        .experience-card:hover,
+        .experience-card:focus {
+            border-color: #1769aa;
+            box-shadow: 0 10px 24px rgba(23,105,170,.1);
+            transform: translateY(-2px);
+            color: inherit;
+        }
+
+    .experience-thumb {
+        width: 84px;
+        height: 74px;
+        border-radius: 8px;
+        background: #edf7f4;
+        color: #116450;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        font-size: 1.45rem;
+    }
+
+        .experience-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .experience-title {
+        color: #17212f;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
+
+    .experience-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+
+    .experience-pill,
+    .skill-pill {
+        background: #f0f4f8;
+        color: #0f426d;
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: .82rem;
+        font-weight: 800;
+    }
+
+    .experience-arrow {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        background: #edf7f4;
+        color: #116450;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .empty-state {
+        border: 1px dashed #cbd5e1;
+        border-radius: 8px;
+        padding: 20px;
+        color: #667085;
+        background: #fbfdff;
+    }
+
+    .skill-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .contact-line {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        color: #667085;
+        margin-bottom: 14px;
+        word-break: break-word;
+    }
+
+        .contact-line i {
+            color: #1769aa;
+            margin-top: 2px;
+        }
+
+    .progress {
+        height: 10px;
+        border-radius: 999px;
+        background: #e8eef5;
+    }
+
+    .progress-bar {
+        background: linear-gradient(90deg, #1769aa, #15836d);
+    }
+
+    .check-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .check-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #5d6b7a;
+        font-weight: 700;
+    }
+
+        .check-item i {
+            color: #15836d;
+        }
+
+    .link-list {
+        display: grid;
+        gap: 10px;
+    }
+
+    .profile-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border: 1px solid #e3eaf2;
+        border-radius: 8px;
+        padding: 12px 14px;
+        color: #0f426d;
+        font-weight: 800;
+        text-decoration: none;
+        transition: .2s ease;
+    }
+
+        .profile-link:hover,
+        .profile-link:focus {
+            background: #f7fafc;
+            border-color: #1769aa;
+            color: #0f426d;
+        }
+
+    @@media (max-width: 1100px) {
+        .profile-layout,
+        .hero-content {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-actions {
+            justify-content: flex-start;
+        }
+
+        .stats-grid,
+        .highlight-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @@media (max-width: 640px) {
+        .student-profile {
+            margin-top: 0;
+        }
+
+        .profile-hero,
+        .profile-panel,
+        .side-panel {
+            border-radius: 0;
+            border-left: 0;
+            border-right: 0;
+        }
+
+        .profile-hero,
+        .profile-panel {
+            padding: 24px;
+        }
+
+        .stats-grid,
+        .highlight-grid,
+        .experience-card {
+            grid-template-columns: 1fr;
+        }
+
+        .experience-thumb {
+            width: 100%;
+            height: 150px;
+        }
+    }
+</style>
+
+<div class="student-profile">
+    <section class="profile-hero">
+        <div class="hero-content">
+            <div class="student-photo">
+                @if (!string.IsNullOrEmpty(Model.FotoPerfil))
+                {
+                    <img src="@Url.Content(Model.FotoPerfil)"
+                         alt="Foto de perfil de @Model.Nome" />
+                }
+                else
+                {
+                    <i class="bi bi-person-fill"></i>
+                }
+            </div>
+
+            <div>
+                <h1 class="student-name">@Model.Nome</h1>
+
+                <div class="student-meta">
+                    <span class="meta-pill">
+                        <i class="bi bi-mortarboard-fill"></i>
+                        @(string.IsNullOrWhiteSpace(Model.Curso) ? "Curso nao informado" : Model.Curso)
+                    </span>
+                    @if (!string.IsNullOrWhiteSpace(Model.Periodo))
+                    {
+                        <span class="meta-pill">
+                            <i class="bi bi-calendar-check-fill"></i>
+                            @Model.Periodo
+                        </span>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.Cidade))
+                    {
+                        <span class="meta-pill">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            @Model.Cidade
+                        </span>
+                    }
+                    <span class="meta-pill">
+                        <i class="bi bi-stars"></i>
+                        @experiencias.Count experiencia(s)
+                    </span>
+                </div>
+            </div>
+
+            <div class="hero-actions">
+                @if (!string.IsNullOrWhiteSpace(Model.Email))
+                {
+                    <a class="btn btn-light"
+                       href="mailto:@Model.Email">
+                        <i class="bi bi-envelope me-2"></i>
+                        Contatar
+                    </a>
+                }
+
+                @if (ehDono)
+                {
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.Id"
+                       class="btn btn-outline-light">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Editar perfil
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+
+    <div class="profile-layout">
+        <main>
+            <section class="profile-panel">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">@experiencias.Count</div>
+                        <div class="stat-label">Experiencias</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">@habilidades.Length</div>
+                        <div class="stat-label">Habilidades</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">@linksPreenchidos</div>
+                        <div class="stat-label">Links profissionais</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">@perfilCompleto%</div>
+                        <div class="stat-label">Perfil preenchido</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="profile-panel">
+                <div class="section-heading">
+                    <h2 class="section-title">Sobre o estudante</h2>
+                    <span class="section-kicker">Apresentacao</span>
+                </div>
+
+                <div class="content-text">
+                    @(string.IsNullOrWhiteSpace(Model.Bio)
+                        ? "Nenhuma bio cadastrada."
+                        : Model.Bio)
+                </div>
+            </section>
+
+            <section class="profile-panel">
+                <div class="section-heading">
+                    <h2 class="section-title">Destaques do perfil</h2>
+                    <span class="section-kicker">Para empresas</span>
+                </div>
+
+                <div class="highlight-grid">
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="bi bi-code-slash"></i>
+                        </div>
+                        <div class="highlight-title">Habilidades principais</div>
+                        <p class="highlight-copy">
+                            @(habilidades.Any()
+                                ? string.Join(", ", habilidades.Take(6))
+                                : "O estudante ainda nao cadastrou habilidades.")
+                        </p>
+                    </div>
+
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="bi bi-journal-bookmark-fill"></i>
+                        </div>
+                        <div class="highlight-title">Formacao</div>
+                        <p class="highlight-copy">
+                            @(string.IsNullOrWhiteSpace(Model.Curso)
+                                ? "Curso ainda nao informado."
+                                : Model.Curso)
+                            @if (!string.IsNullOrWhiteSpace(Model.Periodo))
+                            {
+                                <span> - @Model.Periodo</span>
+                            }
+                        </p>
+                    </div>
+
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="bi bi-send-check"></i>
+                        </div>
+                        <div class="highlight-title">Proximo passo</div>
+                        <p class="highlight-copy">
+                            Entre em contato pelo e-mail, WhatsApp ou acompanhe os links profissionais do estudante.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="profile-panel">
+                <div class="section-heading">
+                    <h2 class="section-title">Experiencias em destaque</h2>
+                    @if (experiencias.Count > 3)
+                    {
+                        <span class="section-kicker">@experiencias.Count experiencias</span>
+                    }
+                </div>
+
+                @if (experienciasRecentes.Any())
+                {
+                    <div class="experience-list">
+                        @foreach (var experiencia in experienciasRecentes)
+                        {
+                            <a asp-controller="Experiencias"
+                               asp-action="Details"
+                               asp-route-id="@experiencia.Id"
+                               class="experience-card">
+                                <div class="experience-thumb">
+                                    @if (!string.IsNullOrWhiteSpace(experiencia.ImagemUrl))
+                                    {
+                                        <img src="@Url.Content(experiencia.ImagemUrl)"
+                                             alt="Imagem de @experiencia.Titulo" />
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-award-fill"></i>
+                                    }
+                                </div>
+
+                                <div>
+                                    <div class="experience-title">@experiencia.Titulo</div>
+                                    <div class="experience-meta">
+                                        <span class="experience-pill">@experiencia.Categoria</span>
+                                        <span class="experience-pill">@experiencia.TipoAtividade</span>
+                                        <span class="experience-pill">@experiencia.Data.ToString("dd/MM/yyyy")</span>
+                                        @if (!string.IsNullOrWhiteSpace(experiencia.Instituicao))
+                                        {
+                                            <span class="experience-pill">@experiencia.Instituicao</span>
+                                        }
+                                    </div>
+                                </div>
+
+                                <span class="experience-arrow">
+                                    <i class="bi bi-arrow-right"></i>
+                                </span>
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        Este estudante ainda nao cadastrou experiencias.
+                    </div>
+                }
+            </section>
+        </main>
+
+        <aside>
+            <section class="side-panel">
+                <h2 class="section-title mb-3">Contato</h2>
+
+                <div class="contact-line">
+                    <i class="bi bi-envelope-fill"></i>
+                    <span>@(string.IsNullOrWhiteSpace(Model.Email) ? "E-mail nao informado" : Model.Email)</span>
+                </div>
+
+                <div class="contact-line">
+                    <i class="bi bi-telephone-fill"></i>
+                    <span>@(string.IsNullOrWhiteSpace(Model.Telefone) ? "Telefone nao informado" : Model.Telefone)</span>
+                </div>
+
+                <div class="contact-line">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <span>@(string.IsNullOrWhiteSpace(Model.Cidade) ? "Cidade nao informada" : Model.Cidade)</span>
+                </div>
+
+                <div class="d-grid gap-2">
+                    @if (!string.IsNullOrWhiteSpace(Model.Email))
+                    {
+                        <a class="btn btn-primary"
+                           href="mailto:@Model.Email">
+                            <i class="bi bi-send me-2"></i>
+                            Enviar e-mail
+                        </a>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(telefoneLimpo))
+                    {
+                        <a class="btn btn-outline-primary"
+                           href="https://wa.me/55@telefoneLimpo"
+                           target="_blank">
+                            <i class="bi bi-whatsapp me-2"></i>
+                            WhatsApp
+                        </a>
+                    }
+                </div>
+            </section>
+
+            <section class="side-panel">
+                <h2 class="section-title mb-3">Habilidades</h2>
+
+                @if (habilidades.Any())
+                {
+                    <div class="skill-cloud">
+                        @foreach (var habilidade in habilidades)
+                        {
+                            <span class="skill-pill">@habilidade</span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        Nenhuma habilidade cadastrada.
+                    </div>
+                }
+            </section>
+
+            <section class="side-panel">
+                <h2 class="section-title mb-3">Links</h2>
+
+                @if (linksPreenchidos > 0)
+                {
+                    <div class="link-list">
+                        @if (!string.IsNullOrWhiteSpace(Model.LinkedIn))
+                        {
+                            <a class="profile-link"
+                               href="@Model.LinkedIn"
+                               target="_blank">
+                                <span><i class="bi bi-linkedin me-2"></i>LinkedIn</span>
+                                <i class="bi bi-box-arrow-up-right"></i>
+                            </a>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.GitHub))
+                        {
+                            <a class="profile-link"
+                               href="@Model.GitHub"
+                               target="_blank">
+                                <span><i class="bi bi-github me-2"></i>GitHub</span>
+                                <i class="bi bi-box-arrow-up-right"></i>
+                            </a>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Portfolio))
+                        {
+                            <a class="profile-link"
+                               href="@Model.Portfolio"
+                               target="_blank">
+                                <span><i class="bi bi-globe me-2"></i>Portfolio</span>
+                                <i class="bi bi-box-arrow-up-right"></i>
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        Nenhum link profissional cadastrado.
+                    </div>
+                }
+            </section>
+
+            <section class="side-panel">
+                <div class="section-heading">
+                    <h2 class="section-title">Perfil</h2>
+                    <span class="section-kicker">@perfilCompleto%</span>
+                </div>
+
+                <div class="progress"
+                     role="progressbar"
+                     aria-valuenow="@perfilCompleto"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                    <div class="progress-bar"
+                         style="width: @perfilCompleto%">
+                    </div>
+                </div>
+
+                <div class="check-list">
+                    <div class="check-item">
+                        <i class="bi @(string.IsNullOrWhiteSpace(Model.FotoPerfil) ? "bi-circle" : "bi-check-circle-fill")"></i>
+                        Foto de perfil
+                    </div>
+                    <div class="check-item">
+                        <i class="bi @(string.IsNullOrWhiteSpace(Model.Bio) ? "bi-circle" : "bi-check-circle-fill")"></i>
+                        Bio
+                    </div>
+                    <div class="check-item">
+                        <i class="bi @(habilidades.Any() ? "bi-check-circle-fill" : "bi-circle")"></i>
+                        Habilidades
+                    </div>
+                    <div class="check-item">
+                        <i class="bi @(experiencias.Any() ? "bi-check-circle-fill" : "bi-circle")"></i>
+                        Experiencias
+                    </div>
+                    <div class="check-item">
+                        <i class="bi @(string.IsNullOrWhiteSpace(Model.Telefone) ? "bi-circle" : "bi-check-circle-fill")"></i>
+                        Telefone
+                    </div>
+                    <div class="check-item">
+                        <i class="bi @(linksPreenchidos > 0 ? "bi-check-circle-fill" : "bi-circle")"></i>
+                        Links profissionais
+                    </div>
+                </div>
+            </section>
+
+            @if (ehDono)
+            {
+                <section class="side-panel">
+                    <h2 class="section-title mb-3">Acoes rapidas</h2>
+
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Experiencias"
+                           asp-action="Create"
+                           class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Adicionar experiencia
+                        </a>
+                        <a asp-action="Edit"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-outline-primary">
+                            <i class="bi bi-pencil-square me-2"></i>
+                            Atualizar perfil
+                        </a>
+                    </div>
+                </section>
+            }
+        </aside>
+    </div>
+</div>

@@ -1,0 +1,571 @@
+@model IEnumerable<LinkAcademico.Models.Estudante>
+
+@{
+    ViewData["Title"] = "Explorar Talentos";
+}
+
+<style>
+
+    body {
+        background: #f4f7fb;
+    }
+
+    .search-page {
+        max-width: 1350px;
+        margin: 40px auto;
+    }
+
+    /* HERO */
+
+    .search-hero {
+        background: linear-gradient(rgba(10,102,194,.90), rgba(0,65,130,.92)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f');
+        background-size: cover;
+        background-position: center;
+        border-radius: 32px;
+        padding: 70px 55px;
+        color: white;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 35px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.10);
+    }
+
+        .search-hero::before {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.05);
+            top: -220px;
+            right: -120px;
+        }
+
+    .search-title {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 15px;
+        position: relative;
+        z-index: 2;
+    }
+
+    .search-subtitle {
+        font-size: 1.1rem;
+        opacity: .95;
+        max-width: 700px;
+        line-height: 1.8;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* SEARCH BOX */
+
+    .search-box {
+        background: white;
+        border-radius: 28px;
+        padding: 30px;
+        margin-top: -55px;
+        position: relative;
+        z-index: 20;
+        box-shadow: 0 15px 35px rgba(0,0,0,.08);
+        border: 1px solid #ececec;
+    }
+
+    .search-input {
+        height: 58px;
+        border-radius: 16px;
+        border: 1px solid #dcdcdc;
+        padding-left: 18px;
+        font-size: .98rem;
+    }
+
+        .search-input:focus {
+            border-color: #0a66c2;
+            box-shadow: 0 0 0 .15rem rgba(10,102,194,.10);
+        }
+
+    .btn-search {
+        height: 58px;
+        border-radius: 16px;
+        font-weight: 700;
+        border: none;
+        background: linear-gradient(135deg, #0a66c2, #004182);
+        transition: .2s;
+    }
+
+        .btn-search:hover {
+            transform: translateY(-1px);
+        }
+
+    /* RESULTS */
+
+    .results-header {
+        margin-top: 45px;
+        margin-bottom: 28px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .results-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1d1d1d;
+    }
+
+    .results-count {
+        background: white;
+        padding: 10px 18px;
+        border-radius: 18px;
+        border: 1px solid #ececec;
+        color: #666;
+        font-weight: 600;
+    }
+
+    /* GRID */
+
+    .students-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 30px;
+    }
+
+    /* CARD */
+
+    .student-card {
+        background: white;
+        border-radius: 28px;
+        overflow: hidden;
+        border: 1px solid #ececec;
+        box-shadow: 0 10px 25px rgba(0,0,0,.05);
+        transition: .25s;
+        position: relative;
+    }
+
+        .student-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 40px rgba(0,0,0,.10);
+        }
+
+        .student-card::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, #0a66c2, #004182);
+        }
+
+    /* BANNER */
+
+    .student-banner {
+        height: 130px;
+        background: linear-gradient(rgba(10,102,194,.88), rgba(0,65,130,.90)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3');
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+
+    /* AVATAR */
+
+    .student-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: white;
+        border: 6px solid white;
+        position: absolute;
+        bottom: -60px;
+        left: 30px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0a66c2;
+        font-size: 3rem;
+        box-shadow: 0 10px 25px rgba(0,0,0,.15);
+    }
+
+        .student-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    /* CONTENT */
+
+    .student-content {
+        padding: 80px 30px 30px 30px;
+    }
+
+    .student-name {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1d1d1d;
+        margin-bottom: 6px;
+    }
+
+    .student-course {
+        color: #0a66c2;
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    .student-info {
+        color: #666;
+        margin-bottom: 18px;
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        font-size: .95rem;
+    }
+
+    .student-bio {
+        color: #555;
+        line-height: 1.8;
+        margin-bottom: 22px;
+        min-height: 90px;
+    }
+
+    /* SKILLS */
+
+    .skills-wrapper {
+        margin-bottom: 25px;
+    }
+
+    .skill-badge {
+        display: inline-block;
+        background: #eef4fb;
+        color: #0a66c2;
+        padding: 8px 14px;
+        border-radius: 18px;
+        font-size: .82rem;
+        font-weight: 700;
+        margin-right: 8px;
+        margin-bottom: 8px;
+    }
+
+    /* EXPERIENCE */
+
+    .experience-title {
+        font-size: 1rem;
+        font-weight: 800;
+        margin-bottom: 15px;
+        color: #1d1d1d;
+    }
+
+    .exp-box {
+        background: #f8fbff;
+        border: 1px solid #e7eef8;
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 14px;
+    }
+
+    .exp-name {
+        font-weight: 800;
+        margin-bottom: 5px;
+        color: #1d1d1d;
+    }
+
+    .exp-category {
+        color: #0a66c2;
+        font-size: .9rem;
+        font-weight: 700;
+    }
+
+    /* BUTTON */
+
+    .btn-profile {
+        width: 100%;
+        margin-top: 20px;
+        border-radius: 30px;
+        padding: 14px;
+        font-weight: 700;
+        border: none;
+        background: linear-gradient(135deg, #0a66c2, #004182);
+    }
+
+        .btn-profile:hover {
+            opacity: .95;
+        }
+
+    /* EMPTY */
+
+    .empty-box {
+        background: white;
+        border-radius: 28px;
+        padding: 70px 40px;
+        text-align: center;
+        border: 1px solid #ececec;
+        box-shadow: 0 10px 25px rgba(0,0,0,.05);
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        color: #0a66c2;
+        margin-bottom: 20px;
+    }
+
+    .empty-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .empty-text {
+        color: #666;
+    }
+
+    /* RESPONSIVO */
+
+    @@media (max-width: 768px) {
+
+        .search-hero {
+            padding: 50px 30px;
+        }
+
+        .search-title {
+            font-size: 2.2rem;
+        }
+
+        .search-box {
+            padding: 22px;
+        }
+
+        .students-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+</style>
+
+<div class="container search-page">
+
+    <!-- HERO -->
+
+    <div class="search-hero">
+
+        <div class="search-title">
+            Explorar Talentos
+        </div>
+
+        <div class="search-subtitle">
+            Descubra estudantes com habilidades, experiências
+            acadêmicas e projetos inovadores.
+        </div>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+        <form method="get">
+
+            <div class="row align-items-center">
+
+                <div class="col-lg-5 mb-3 mb-lg-0">
+
+                    <input type="text"
+                           name="nome"
+                           value="@Context.Request.Query["nome"]"
+                           class="form-control search-input"
+                           placeholder="Buscar por nome..." />
+
+                </div>
+
+                <div class="col-lg-5 mb-3 mb-lg-0">
+
+                    <input type="text"
+                           name="categoria"
+                           value="@Context.Request.Query["categoria"]"
+                           class="form-control search-input"
+                           placeholder="Categoria da experiência..." />
+
+                </div>
+
+                <div class="col-lg-2">
+
+                    <button type="submit"
+                            class="btn btn-primary btn-search w-100">
+
+                        <i class="bi bi-search me-2"></i>
+
+                        Buscar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- RESULTADOS -->
+
+    <div class="results-header">
+
+        <div class="results-title">
+            Estudantes Encontrados
+        </div>
+
+        <div class="results-count">
+            @Model.Count() talento(s)
+        </div>
+
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="students-grid">
+
+            @foreach (var estudante in Model)
+            {
+                <div class="student-card">
+
+                    <!-- TOP -->
+
+                    <div class="student-banner">
+
+                        <div class="student-avatar">
+
+                            @if (!string.IsNullOrEmpty(estudante.FotoPerfil))
+                            {
+                                <img src="@estudante.FotoPerfil"
+                                     alt="Foto do estudante"
+                                     onerror="this.src='/images/default-user.png'" />
+                            }
+                            else
+                            {
+                                <i class="bi bi-person-fill"></i>
+                            }
+
+                        </div>
+
+                    </div>
+
+                    <!-- CONTENT -->
+
+                    <div class="student-content">
+
+                        <div class="student-name">
+                            @estudante.Nome
+                        </div>
+
+                        <div class="student-course">
+                            @estudante.Curso
+                        </div>
+
+                        <div class="student-info">
+
+                            @if (!string.IsNullOrEmpty(estudante.Cidade))
+                            {
+                                <span>
+                                    ?? @estudante.Cidade
+                                </span>
+                            }
+
+                            @if (!string.IsNullOrEmpty(estudante.Periodo))
+                            {
+                                <span>
+                                    ?? @estudante.Periodo
+                                </span>
+                            }
+
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(estudante.Bio))
+                        {
+                            <div class="student-bio">
+
+                                @(estudante.Bio.Length > 140
+                                    ? estudante.Bio.Substring(0, 140) + "..."
+                                    : estudante.Bio)
+
+                            </div>
+                        }
+
+                        <!-- SKILLS -->
+                        @if (!string.IsNullOrEmpty(estudante.Habilidades))
+                        {
+                            <div class="skills-wrapper">
+
+                                @foreach (var skill in estudante.Habilidades.Split(',').Take(5))
+                                {
+                                    <span class="skill-badge">
+                                        @skill.Trim()
+                                    </span>
+                                }
+
+                            </div>
+                        }
+
+                        <!-- EXPERIÊNCIAS -->
+                        @if (estudante.Experiencias != null &&
+                                                     estudante.Experiencias.Any())
+                        {
+                            <div class="experience-title">
+                                Experiências Recentes
+                            </div>
+
+                            @foreach (var exp in estudante.Experiencias.Take(2))
+                            {
+                                <div class="exp-box">
+
+                                    <div class="exp-name">
+                                        @exp.Titulo
+                                    </div>
+
+                                    <div class="exp-category">
+                                        @exp.Categoria
+                                    </div>
+
+                                </div>
+                            }
+                        }
+
+                        <!-- BUTTON -->
+
+                        <a asp-action="Perfil"
+                               asp-route-id="@estudante.Id"
+                               class="btn btn-primary btn-profile">
+
+                            <i class="bi bi-person-badge-fill me-2"></i>
+
+                            Ver Perfil Completo
+
+                        </a>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-box">
+
+            <div class="empty-icon">
+                <i class="bi bi-search"></i>
+            </div>
+
+            <div class="empty-title">
+                Nenhum estudante encontrado
+            </div>
+
+            <div class="empty-text">
+                Tente pesquisar utilizando outros filtros.
+            </div>
+
+        </div>
+    }
+
+</div>

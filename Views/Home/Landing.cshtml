@@ -1,0 +1,426 @@
+﻿@{
+    ViewData["Title"] = "Bem-vindo";
+}
+
+<style>
+
+    .landing-page {
+        min-height: calc(100vh - 96px);
+        display: flex;
+        align-items: stretch;
+        justify-content: center;
+        padding: 0 0 44px;
+    }
+
+    .landing-card {
+        width: 100%;
+        min-height: min(760px, calc(100vh - 124px));
+        background: linear-gradient(100deg, rgba(10, 22, 34, .92) 0%, rgba(15, 66, 109, .82) 54%, rgba(21, 131, 109, .58) 100%), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1600&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        border-radius: 8px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: minmax(0, 1.04fr) minmax(340px, .64fr);
+        box-shadow: 0 22px 52px rgba(23,33,47,.16);
+        border: 1px solid rgba(255,255,255,.32);
+    }
+
+    /* ESQUERDA */
+
+    .landing-left {
+        padding: clamp(38px, 6vw, 76px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #fff;
+        position: relative;
+    }
+
+    .landing-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255,255,255,.13);
+        color: #fff;
+        border: 1px solid rgba(255,255,255,.22);
+        border-radius: 8px;
+        padding: 9px 16px;
+        font-weight: 700;
+        width: fit-content;
+        margin-bottom: 22px;
+        backdrop-filter: blur(12px);
+    }
+
+    .landing-title {
+        font-size: clamp(2.25rem, 5.2vw, 4.85rem);
+        font-weight: 900;
+        line-height: 1.02;
+        color: #fff;
+        margin-bottom: 22px;
+        max-width: 860px;
+        text-wrap: balance;
+    }
+
+        .landing-title span {
+            color: #9ee6d5;
+        }
+
+    .landing-description {
+        font-size: 1.08rem;
+        line-height: 1.75;
+        color: rgba(255,255,255,.88);
+        max-width: 650px;
+        margin-bottom: 32px;
+    }
+
+    /* BOTÕES */
+
+    .landing-buttons {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+    }
+
+    .btn-landing {
+        border-radius: 8px;
+        padding: 14px 24px;
+        font-size: 1rem;
+        font-weight: 800;
+        transition: .25s;
+        min-height: 52px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-main {
+        background: #ffffff;
+        border: none;
+        color: #0f426d;
+    }
+
+        .btn-main:hover {
+            transform: translateY(-3px);
+            color: #0f426d;
+            box-shadow: 0 12px 28px rgba(0,0,0,.18);
+        }
+
+    .btn-outline-custom {
+        border: 1px solid rgba(255,255,255,.46);
+        color: #fff;
+        background: rgba(255,255,255,.10);
+        backdrop-filter: blur(12px);
+    }
+
+        .btn-outline-custom:hover {
+            background: rgba(255,255,255,.18);
+            color: #fff;
+            transform: translateY(-3px);
+        }
+
+    /* ESTATÍSTICAS */
+
+    .landing-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(112px, 1fr));
+        gap: 14px;
+        margin-top: 42px;
+        max-width: 560px;
+    }
+
+    .stat-item {
+        padding: 16px 18px;
+        border-radius: 8px;
+        background: rgba(255,255,255,.12);
+        border: 1px solid rgba(255,255,255,.18);
+        backdrop-filter: blur(12px);
+    }
+
+        .stat-item h2 {
+            font-size: 1.75rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .stat-item p {
+            color: rgba(255,255,255,.76);
+            margin: 0;
+        }
+
+    /* DIREITA */
+
+    .landing-right {
+        background: rgba(248,250,252,.94);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 46px;
+    }
+
+    .landing-panel {
+        width: 100%;
+        border-radius: 8px;
+        background: #fff;
+        color: #17212f;
+        padding: 30px;
+        position: relative;
+        box-shadow: 0 18px 42px rgba(23,33,47,.12);
+        border: 1px solid #d8e0ea;
+    }
+
+    .panel-title {
+        font-weight: 900;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .panel-row {
+        display: flex;
+        gap: 14px;
+        padding: 16px 0;
+        border-top: 1px solid #edf1f5;
+    }
+
+        .panel-row:first-of-type {
+            border-top: 0;
+            padding-top: 0;
+        }
+
+    .panel-icon {
+        width: 46px;
+        height: 46px;
+        border-radius: 8px;
+        background: #f0f4f8;
+        color: #1769aa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+    }
+
+    .panel-row strong {
+        display: block;
+        margin-bottom: 3px;
+    }
+
+    .panel-row span {
+        color: #667085;
+        font-size: .94rem;
+    }
+
+    /* RESPONSIVO */
+
+    @@media(max-width: 992px) {
+
+        .landing-page {
+            padding-bottom: 28px;
+        }
+
+        .landing-card {
+            grid-template-columns: 1fr;
+            min-height: auto;
+        }
+
+        .landing-right {
+            padding: 0 35px 36px;
+            background: transparent;
+        }
+
+        .landing-left {
+            padding: 40px 35px 30px;
+        }
+
+        .landing-title {
+            font-size: 2.8rem;
+        }
+    }
+
+    @@media(max-width: 576px) {
+
+        .landing-page {
+            padding-bottom: 18px;
+        }
+
+        .landing-card {
+            border-radius: 0;
+            border-left: 0;
+            border-right: 0;
+        }
+
+        .landing-left {
+            padding: 26px 24px 24px;
+        }
+
+        .landing-title {
+            font-size: 2.05rem;
+            line-height: 1.08;
+        }
+
+        .landing-description {
+            font-size: .98rem;
+            line-height: 1.65;
+        }
+
+        .landing-buttons {
+            flex-direction: column;
+        }
+
+        .btn-landing {
+            width: 100%;
+        }
+
+        .landing-stats {
+            grid-template-columns: 1fr;
+            margin-top: 26px;
+        }
+
+        .landing-right {
+            padding: 0 24px 28px;
+        }
+
+        .landing-panel {
+            padding: 22px;
+        }
+    }
+
+</style>
+
+<div class="landing-page">
+
+    <div class="landing-card">
+
+        <!-- ESQUERDA -->
+
+        <div class="landing-left">
+
+            <div class="landing-badge">
+
+                <i class="bi bi-mortarboard-fill"></i>
+
+                Plataforma Acadêmica Profissional
+
+            </div>
+
+            <div class="landing-title">
+
+                Conecte-se ao futuro com o
+                <span>Link Acadêmico</span>
+
+            </div>
+
+            <div class="landing-description">
+
+                Crie conexões entre estudantes,
+                empresas e oportunidades em uma
+                plataforma moderna inspirada
+                no LinkedIn.
+
+            </div>
+
+            <div class="landing-buttons">
+
+                <a asp-area="Identity"
+                       asp-page="/Account/Register"
+                       class="btn btn-landing btn-main">
+
+                    <i class="bi bi-person-plus-fill me-2"></i>
+
+                    Criar Conta
+
+                </a>
+
+                <a asp-area="Identity"
+                       asp-page="/Account/Login"
+                       class="btn btn-landing btn-outline-custom">
+
+                    <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                    Entrar
+
+                </a>
+
+            </div>
+
+            <!-- STATS -->
+
+            <div class="landing-stats">
+
+                <div class="stat-item">
+
+                    <h2>+100</h2>
+
+                    <p>Estudantes</p>
+
+                </div>
+
+                <div class="stat-item">
+
+                    <h2>+20</h2>
+
+                    <p>Empresas</p>
+
+                </div>
+
+                <div class="stat-item">
+
+                    <h2>24h</h2>
+
+                    <p>Networking</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- DIREITA -->
+
+        <div class="landing-right">
+
+            <div class="landing-panel">
+
+                <div class="panel-title">
+                    O que você encontra aqui
+                </div>
+
+                <div class="panel-row">
+                    <div class="panel-icon">
+                        <i class="bi bi-person-workspace"></i>
+                    </div>
+                    <div>
+                        <strong>Portfólios acadêmicos</strong>
+                        <span>Projetos, certificados e experiências em um perfil organizado.</span>
+                    </div>
+                </div>
+
+                <div class="panel-row">
+                    <div class="panel-icon">
+                        <i class="bi bi-building-check"></i>
+                    </div>
+                    <div>
+                        <strong>Empresas parceiras</strong>
+                        <span>Perfis de empresas para aproximar oportunidades e talentos.</span>
+                    </div>
+                </div>
+
+                <div class="panel-row">
+                    <div class="panel-icon">
+                        <i class="bi bi-diagram-3"></i>
+                    </div>
+                    <div>
+                        <strong>Conexões com contexto</strong>
+                        <span>Busca por habilidades, área e experiências publicadas.</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

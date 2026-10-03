@@ -1,0 +1,87 @@
+@model LinkAcademico.Models.Vaga
+
+@{
+    var isEdit = Model.Id > 0;
+}
+
+<div class="bg-white border rounded-3 shadow-sm p-4">
+    <div class="mb-4">
+        <h1 class="fw-bold mb-1">@(isEdit ? "Editar vaga" : "Nova vaga")</h1>
+        <p class="text-muted mb-0">
+            Informe os requisitos separados por vírgula. Eles serão usados para validar a candidatura dos estudantes.
+        </p>
+    </div>
+
+    <form method="post">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="Id" />
+        }
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-lg-8">
+                <label asp-for="Titulo" class="form-label fw-bold"></label>
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+
+            <div class="col-lg-4">
+                <label asp-for="TipoVaga" class="form-label fw-bold"></label>
+                <input asp-for="TipoVaga" class="form-control" placeholder="Estágio, Júnior..." />
+            </div>
+
+            <div class="col-lg-4">
+                <label asp-for="ModeloTrabalho" class="form-label fw-bold"></label>
+                <input asp-for="ModeloTrabalho" class="form-control" placeholder="Remoto, híbrido..." />
+            </div>
+
+            <div class="col-lg-4">
+                <label asp-for="Local" class="form-label fw-bold"></label>
+                <input asp-for="Local" class="form-control" />
+            </div>
+
+            <div class="col-lg-4">
+                <label asp-for="Remuneracao" class="form-label fw-bold"></label>
+                <input asp-for="Remuneracao" class="form-control" placeholder="R$ 1.500,00" />
+            </div>
+
+            <div class="col-lg-8">
+                <label asp-for="Requisitos" class="form-label fw-bold"></label>
+                <input asp-for="Requisitos" class="form-control" placeholder="C#, SQL, HTML, Comunicação" />
+                <span asp-validation-for="Requisitos" class="text-danger"></span>
+            </div>
+
+            <div class="col-lg-4">
+                <label asp-for="DataLimite" class="form-label fw-bold"></label>
+                <input asp-for="DataLimite" class="form-control" />
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Descricao" class="form-label fw-bold"></label>
+                <textarea asp-for="Descricao" class="form-control" rows="7"></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+
+            <div class="col-12">
+                <div class="form-check form-switch">
+                    <input asp-for="Ativa" class="form-check-input" />
+                    <label asp-for="Ativa" class="form-check-label fw-bold">
+                        Vaga ativa
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary">
+                @(isEdit ? "Salvar alterações" : "Publicar vaga")
+            </button>
+
+            <a asp-action="Minhas" class="btn btn-outline-secondary">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>

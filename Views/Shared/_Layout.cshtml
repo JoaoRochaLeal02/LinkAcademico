@@ -1,0 +1,915 @@
+﻿@using Microsoft.EntityFrameworkCore
+@using LinkAcademico.Data
+@using System.Security.Claims
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - Link Acadêmico
+    </title>
+
+    <!-- BOOTSTRAP -->
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- BOOTSTRAP ICONS -->
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- CSS -->
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/LinkAcademico.styles.css"
+          asp-append-version="true" />
+
+    <style>
+
+            :root {
+                --la-bg: #f5f7fa;
+                --la-surface: #ffffff;
+                --la-surface-soft: #f0f4f8;
+                --la-border: #d8e0ea;
+                --la-text: #17212f;
+                --la-muted: #667085;
+                --la-primary: #1769aa;
+                --la-primary-dark: #0f426d;
+                --la-accent: #15836d;
+                --la-shadow: 0 10px 26px rgba(23, 33, 47, .07);
+            }
+
+            body {
+                background: var(--la-bg);
+                font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+                color: var(--la-text);
+                overflow-x: hidden;
+            }
+
+            /* CONTAINER */
+
+            .main-container {
+                max-width: 1360px;
+            }
+
+            /* NAVBAR */
+
+            .linkedin-navbar {
+                background: rgba(255,255,255,.94);
+                backdrop-filter: blur(16px);
+                border-bottom: 1px solid var(--la-border);
+                position: sticky;
+                top: 0;
+                z-index: 999;
+                padding-top: 6px;
+                padding-bottom: 6px;
+                box-shadow: 0 6px 22px rgba(23,33,47,.05);
+            }
+
+            .navbar-brand-custom {
+                color: var(--la-primary-dark) !important;
+                font-weight: 900;
+                font-size: 1.25rem;
+                text-decoration: none;
+                letter-spacing: 0;
+                transition: .2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+                .navbar-brand-custom::before {
+                    content: "LA";
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 8px;
+                    background: linear-gradient(135deg, var(--la-primary), var(--la-accent));
+                    color: #fff;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: .78rem;
+                    letter-spacing: .04em;
+                }
+
+                .navbar-brand-custom:hover {
+                    transform: translateY(-1px);
+                }
+
+            /* SEARCH */
+
+            .navbar-search-wrapper {
+                position: relative;
+                width: 340px;
+            }
+
+            .navbar-search-icon {
+                position: absolute;
+                left: 16px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--la-muted);
+                font-size: .95rem;
+            }
+
+            .navbar-search {
+                width: 100%;
+                background: var(--la-surface-soft);
+                border: 1px solid transparent;
+                border-radius: 10px;
+                padding: 9px 14px 9px 40px;
+                transition: .25s;
+                font-size: .95rem;
+            }
+
+                .navbar-search:focus {
+                    outline: none;
+                    border-color: var(--la-primary);
+                    background: white;
+                    box-shadow: 0 0 0 .2rem rgba(23,105,170,.12);
+                }
+
+            /* NAV LINKS */
+
+            .nav-link-custom {
+                color: var(--la-muted) !important;
+                font-weight: 700;
+                margin-left: 8px;
+                transition: .2s;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                position: relative;
+                padding: 8px 10px !important;
+                border-radius: 10px;
+            }
+
+                .nav-link-custom:hover {
+                    background: var(--la-surface-soft);
+                    color: var(--la-primary-dark) !important;
+                }
+
+            /* BUTTONS */
+
+            .btn-login {
+                border: 1px solid var(--la-border);
+                color: var(--la-primary-dark);
+                border-radius: 10px;
+                padding: 8px 14px;
+                text-decoration: none;
+                font-weight: 700;
+                transition: .2s;
+                background: white;
+            }
+
+                .btn-login:hover {
+                    background: var(--la-surface-soft);
+                    color: var(--la-primary-dark);
+                    transform: translateY(-1px);
+                }
+
+            .btn-register {
+                background: var(--la-primary-dark);
+                color: white !important;
+                border-radius: 10px;
+                padding: 8px 14px;
+                text-decoration: none;
+                font-weight: 700;
+                transition: .2s;
+                margin-left: 10px;
+                border: none;
+                box-shadow: 0 8px 18px rgba(15,66,109,.18);
+            }
+
+                .btn-register:hover {
+                    opacity: .95;
+                    color: white;
+                    transform: translateY(-1px);
+                }
+
+            /* LAYOUT */
+
+            .main-wrapper {
+                margin-top: 20px;
+                min-height: 80vh;
+            }
+
+            /* SIDEBAR */
+
+            .sidebar-card {
+                background: var(--la-surface);
+                border-radius: 8px;
+                overflow: hidden;
+                border: 1px solid var(--la-border);
+                box-shadow: 0 10px 28px rgba(23,33,47,.06);
+                position: sticky;
+                top: 76px;
+            }
+
+            .sidebar-top {
+                height: 70px;
+                background: linear-gradient(135deg, rgba(15,66,109,.92), rgba(21,131,109,.82)), url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200');
+                background-size: cover;
+                background-position: center;
+            }
+
+            .sidebar-content {
+                padding: 16px;
+                text-align: center;
+            }
+
+            /* FOTO PERFIL */
+
+            .profile-avatar {
+                width: 72px;
+                height: 72px;
+                border-radius: 50%;
+                margin: -50px auto 10px auto;
+                border: 4px solid white;
+                box-shadow: 0 10px 24px rgba(23,33,47,.14);
+                overflow: hidden;
+                background: linear-gradient(135deg, var(--la-primary), var(--la-accent));
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+                .profile-avatar img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+
+                .profile-avatar i {
+                    color: white;
+                    font-size: 2.2rem;
+                }
+
+            .sidebar-name {
+                font-weight: 800;
+                margin-bottom: 6px;
+                font-size: 1.05rem;
+                word-break: break-word;
+            }
+
+            .sidebar-role {
+                color: var(--la-muted);
+                font-size: .95rem;
+            }
+
+            /* SIDEBAR BUTTONS */
+
+            .sidebar-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 16px;
+            }
+
+            .sidebar-btn {
+                width: 100%;
+                border-radius: 8px;
+                padding: 9px 12px;
+                background: #fff;
+                border: 1px solid var(--la-border);
+                color: var(--la-text);
+                text-decoration: none;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                transition: .2s;
+            }
+
+                .sidebar-btn:hover {
+                    background: var(--la-surface-soft);
+                    color: var(--la-primary-dark);
+                    border-color: #c9d6e4;
+                    transform: translateY(-2px);
+                }
+
+            .primary-btn {
+                background: var(--la-primary-dark);
+                color: white;
+                border: none;
+                box-shadow: 0 10px 24px rgba(15,66,109,.16);
+            }
+
+                .primary-btn:hover {
+                    color: white;
+                    opacity: .96;
+                }
+
+            /* FEED */
+
+            .feed-card {
+                background: transparent;
+                border-radius: 0;
+                border: none;
+                padding: 0;
+                box-shadow: none !important;
+            }
+
+            /* RESPONSIVO */
+
+            @@media (max-width: 992px) {
+
+                .navbar-search-wrapper {
+                    width: 100%;
+                    margin-top: 10px;
+                    margin-bottom: 8px;
+                }
+
+                .nav-link-custom {
+                    margin-left: 0;
+                    margin-top: 10px;
+                }
+
+                .sidebar-card {
+                    margin-bottom: 14px;
+                    position: relative;
+                    top: 0;
+                }
+
+                .main-container {
+                    max-width: 100%;
+                    padding-left: 15px;
+                    padding-right: 15px;
+                }
+            }
+
+    </style>
+
+</head>
+
+<body>
+
+    @{
+        var isIdentityPage =
+            Context.Request.Path.StartsWithSegments("/Identity");
+
+        string? fotoPerfil = null;
+
+        if (User.Identity != null &&
+            User.Identity.IsAuthenticated)
+        {
+            var db =
+                Context.RequestServices
+                .GetService(typeof(AppDbContext))
+                as AppDbContext;
+
+            var userId =
+                User.FindFirstValue(
+                    ClaimTypes.NameIdentifier);
+
+            // FOTO ESTUDANTE
+            if (User.IsInRole("Estudante"))
+            {
+                fotoPerfil = await db.Estudantes
+                    .Where(e => e.UserId == userId)
+                    .Select(e => e.FotoPerfil)
+                    .FirstOrDefaultAsync();
+            }
+
+            // FOTO EMPRESA
+            if (User.IsInRole("Empresa"))
+            {
+                fotoPerfil = await db.Empresas
+                    .Where(e => e.UserId == userId)
+                    .Select(e => e.FotoPerfil)
+                    .FirstOrDefaultAsync();
+            }
+        }
+    }
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar navbar-expand-lg linkedin-navbar">
+
+        <div class="container-fluid px-4">
+
+            <!-- LOGO -->
+
+            <a class="navbar-brand-custom"
+                   asp-controller="Home"
+                   asp-action="Index">
+
+                Link Acadêmico
+
+            </a>
+
+            <!-- RESPONSIVO -->
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarMain">
+
+                <span class="navbar-toggler-icon"></span>
+
+            </button>
+
+            <!-- MENU -->
+
+            <div class="collapse navbar-collapse"
+                 id="navbarMain">
+
+                <!-- SEARCH -->
+
+                <form class="ms-lg-4 me-auto mt-3 mt-lg-0">
+
+                    <div class="navbar-search-wrapper">
+
+                        <i class="bi bi-search navbar-search-icon"></i>
+
+                        <input class="navbar-search"
+                               type="search"
+                               placeholder="Pesquisar..." />
+
+                    </div>
+
+                </form>
+
+                <!-- LINKS -->
+
+                <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                    <li class="nav-item">
+
+                        <a class="nav-link nav-link-custom"
+                               asp-controller="Home"
+                               asp-action="Index">
+
+                            <i class="bi bi-house-door-fill"></i>
+
+                            Início
+
+                        </a>
+
+                    </li>
+
+                    <!-- ESTUDANTE -->
+                    @if (User.IsInRole("Estudante"))
+                    {
+                        <li class="nav-item">
+
+                            <a class="nav-link nav-link-custom"
+                                   asp-controller="Estudantes"
+                                   asp-action="Index">
+
+                                <i class="bi bi-person-badge-fill"></i>
+
+                                Meu Perfil
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link nav-link-custom"
+                                   asp-controller="Experiencias"
+                                   asp-action="Index">
+
+                                <i class="bi bi-briefcase-fill"></i>
+
+                                Experiências
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link nav-link-custom"
+                                   asp-controller="Vagas"
+                                   asp-action="Index">
+
+                                <i class="bi bi-briefcase-fill"></i>
+
+                                Vagas
+
+                            </a>
+
+                        </li>
+                    }
+
+                    <!-- EMPRESA -->
+                    @if (User.IsInRole("Empresa"))
+                    {
+                        <li class="nav-item">
+
+                            <a class="nav-link nav-link-custom"
+                                   asp-controller="Empresas"
+                                   asp-action="Perfil">
+
+                                <i class="bi bi-building-fill"></i>
+
+                                Meu Perfil
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link nav-link-custom"
+                                   asp-controller="Estudantes"
+                                   asp-action="Buscar">
+
+                                <i class="bi bi-search"></i>
+
+                                Talentos
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+
+                            <a class="nav-link nav-link-custom"
+                                   asp-controller="Vagas"
+                                   asp-action="Minhas">
+
+                                <i class="bi bi-briefcase-fill"></i>
+
+                                Vagas
+
+                            </a>
+
+                        </li>
+                    }
+
+                    <!-- LOGIN / LOGOUT -->
+                    @if (User.Identity != null &&
+                                             User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+
+                            <form asp-area="Identity"
+                                  asp-page="/Account/Logout"
+                                  method="post">
+
+                                <button type="submit"
+                                        class="btn btn-login">
+
+                                    Sair
+
+                                </button>
+
+                            </form>
+
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+
+                            <a class="btn-login"
+                                   asp-area="Identity"
+                                   asp-page="/Account/Login">
+
+                                Entrar
+
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item mt-3 mt-lg-0">
+
+                            <a class="btn-register"
+                                   asp-area="Identity"
+                                   asp-page="/Account/Register">
+
+                                Criar Conta
+
+                            </a>
+
+                        </li>
+                    }
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- CONTEÚDO -->
+
+    <div class="container-fluid main-container main-wrapper">
+
+        <div class="row g-3">
+
+            <!-- SIDEBAR -->
+            @if (User.Identity != null &&
+                             User.Identity.IsAuthenticated &&
+                             !isIdentityPage)
+            {
+                <div class="col-lg-3">
+
+                    <div class="sidebar-card">
+
+                        <div class="sidebar-top"></div>
+
+                        <div class="sidebar-content">
+
+                            <!-- FOTO -->
+
+                            <div class="profile-avatar">
+
+                                @if (!string.IsNullOrEmpty(fotoPerfil))
+                                {
+                                    <img src="@Url.Content(fotoPerfil)"
+                                         alt="Foto de Perfil" />
+                                }
+                                else
+                                {
+                                    <i class="bi bi-person-fill"></i>
+                                }
+
+                            </div>
+
+                            <!-- NOME -->
+
+                            <h5 class="sidebar-name">
+                                @User.Identity.Name
+                            </h5>
+
+                            <!-- ROLE -->
+                            @if (User.IsInRole("Estudante"))
+                            {
+                                <p class="sidebar-role">
+                                    Estudante • Link Acadêmico
+                                </p>
+                            }
+
+                            @if (User.IsInRole("Empresa"))
+                            {
+                                <p class="sidebar-role">
+                                    Empresa Parceira
+                                </p>
+                            }
+
+                            <!-- AÇÕES -->
+
+                            <div class="sidebar-actions">
+
+                                @if (User.IsInRole("Estudante"))
+                                {
+                                    <a asp-controller="Estudantes"
+                                           asp-action="Index"
+                                           class="sidebar-btn">
+
+                                        <i class="bi bi-person-circle"></i>
+
+                                        Meu perfil
+
+                                    </a>
+
+                                    <a asp-controller="Experiencias"
+                                           asp-action="Create"
+                                           class="sidebar-btn primary-btn">
+
+                                        <i class="bi bi-plus-circle-fill"></i>
+
+                                        Nova experiência
+
+                                    </a>
+
+                                    <a asp-controller="Vagas"
+                                           asp-action="Index"
+                                           class="sidebar-btn">
+
+                                        <i class="bi bi-briefcase"></i>
+
+                                        Ver vagas
+
+                                    </a>
+                                }
+
+                                @if (User.IsInRole("Empresa"))
+                                {
+                                    <a asp-controller="Empresas"
+                                           asp-action="Perfil"
+                                           class="sidebar-btn">
+
+                                        <i class="bi bi-building"></i>
+
+                                        Minha empresa
+
+                                    </a>
+
+                                    <a asp-controller="Estudantes"
+                                           asp-action="Buscar"
+                                           class="sidebar-btn primary-btn">
+
+                                        <i class="bi bi-search"></i>
+
+                                        Explorar talentos
+
+                                    </a>
+
+                                    <a asp-controller="Vagas"
+                                           asp-action="Minhas"
+                                           class="sidebar-btn">
+
+                                        <i class="bi bi-briefcase"></i>
+
+                                        Minhas vagas
+
+                                    </a>
+
+                                    <a asp-controller="Vagas"
+                                           asp-action="Create"
+                                           class="sidebar-btn">
+
+                                        <i class="bi bi-plus-circle"></i>
+
+                                        Nova vaga
+
+                                    </a>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+            <!-- BODY -->
+
+            <div class="@(
+                                 User.Identity != null &&
+                                 User.Identity.IsAuthenticated &&
+                                 !isIdentityPage
+                                     ? "col-lg-9"
+                                     : "col-lg-12"
+                                         )">
+
+                <div class="feed-card">
+
+                    @RenderBody()
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <style>
+        /* Ajuste final de densidade: fica depois das Views para sobrescrever estilos locais. */
+        .main-container {
+            max-width: 1680px !important;
+            width: calc(100% - 28px) !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        .main-wrapper {
+            margin-top: 14px !important;
+        }
+
+        .main-wrapper > .row {
+            --bs-gutter-x: 1rem !important;
+            --bs-gutter-y: 1rem !important;
+        }
+
+        .feed-card > .container,
+        .feed-card > .container-fluid,
+        .search-page,
+        .exp-page,
+        .profile-container,
+        .student-container,
+        .edit-container,
+        .exp-container,
+        .company-page,
+        .company-container {
+            max-width: 100% !important;
+            width: 100% !important;
+            margin-top: 12px !important;
+            margin-bottom: 22px !important;
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        .hero-section,
+        .landing-hero,
+        .search-hero,
+        .create-hero,
+        .exp-hero,
+        .profile-hero {
+            padding: 28px 28px !important;
+            margin-bottom: 16px !important;
+            border-radius: 8px !important;
+        }
+
+        .landing-card,
+        .student-card,
+        .edit-card,
+        .exp-card,
+        .preview-card,
+        .stats-card,
+        .profile-card,
+        .company-form-card,
+        .right-card,
+        .home-feed-card,
+        .home-job-card,
+        .job-card,
+        .experience-card,
+        .sidebar-card,
+        .card {
+            border-radius: 8px !important;
+        }
+
+        .student-card,
+        .edit-card,
+        .exp-card,
+        .preview-card,
+        .profile-card,
+        .company-form-card,
+        .landing-card {
+            padding: 22px !important;
+        }
+
+        .right-card,
+        .home-feed-content,
+        .home-job-card,
+        .job-card,
+        .experience-card,
+        .stats-card,
+        .card-body {
+            padding: 14px !important;
+        }
+
+        .home-feed-grid,
+        .home-jobs-grid,
+        .exp-grid,
+        .students-grid,
+        .row {
+            --bs-gutter-x: 1rem !important;
+            --bs-gutter-y: 1rem !important;
+        }
+
+        .mt-5 {
+            margin-top: 1.25rem !important;
+        }
+
+        .mb-5 {
+            margin-bottom: 1.25rem !important;
+        }
+
+        .section-title,
+        .card-title,
+        .right-title {
+            margin-bottom: 10px !important;
+        }
+
+        @@media (max-width: 768px) {
+            .main-container {
+                width: calc(100% - 16px) !important;
+            }
+
+            .hero-section,
+            .landing-hero,
+            .search-hero,
+            .create-hero,
+            .exp-hero,
+            .profile-hero {
+                padding: 22px 18px !important;
+            }
+        }
+    </style>
+
+    <!-- SCRIPTS -->
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

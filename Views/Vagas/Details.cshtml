@@ -1,0 +1,223 @@
+@model LinkAcademico.Models.Vaga
+
+@{
+    ViewData["Title"] = "Detalhes da vaga";
+
+    var jaCandidatou =
+        ViewBag.JaCandidatou as bool? ?? false;
+}
+
+<style>
+    .job-detail {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 22px;
+    }
+
+    .job-main,
+    .job-side {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 12px;
+        box-shadow: 0 10px 26px rgba(23,33,47,.06);
+    }
+
+    .job-main {
+        padding: 30px;
+    }
+
+    .job-side {
+        padding: 22px;
+        height: fit-content;
+        position: sticky;
+        top: 92px;
+    }
+
+    .company-name {
+        color: #15836d;
+        font-weight: 900;
+        margin-bottom: 10px;
+    }
+
+    .job-title {
+        font-size: 2rem;
+        font-weight: 900;
+        color: #17212f;
+        margin-bottom: 14px;
+    }
+
+    .job-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 26px;
+    }
+
+    .job-pill {
+        background: #f0f4f8;
+        color: #0f426d;
+        border-radius: 999px;
+        padding: 7px 11px;
+        font-size: .84rem;
+        font-weight: 800;
+    }
+
+    .section-label {
+        font-weight: 900;
+        color: #17212f;
+        margin-top: 24px;
+        margin-bottom: 10px;
+    }
+
+    .content-text {
+        color: #667085;
+        line-height: 1.75;
+        white-space: pre-line;
+    }
+
+    .req-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .req-item {
+        background: #edf7f4;
+        color: #116450;
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-weight: 800;
+        font-size: .88rem;
+    }
+
+    @@media (max-width: 992px) {
+        .job-detail {
+            grid-template-columns: 1fr;
+        }
+
+        .job-side {
+            position: static;
+        }
+    }
+</style>
+
+@if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success">@TempData["Sucesso"]</div>
+}
+
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger">@TempData["Erro"]</div>
+}
+
+<div class="job-detail">
+    <article class="job-main">
+        <div class="company-name">
+            @(Model.Empresa?.Nome ?? "Empresa")
+        </div>
+
+        <h1 class="job-title">
+            @Model.Titulo
+        </h1>
+
+        <div class="job-meta">
+            @if (!string.IsNullOrWhiteSpace(Model.ModeloTrabalho))
+            {
+                <span class="job-pill">@Model.ModeloTrabalho</span>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.TipoVaga))
+            {
+                <span class="job-pill">@Model.TipoVaga</span>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Local))
+            {
+                <span class="job-pill">@Model.Local</span>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(Model.Remuneracao))
+            {
+                <span class="job-pill">@Model.Remuneracao</span>
+            }
+        </div>
+
+        <div class="section-label">Descrição</div>
+        <div class="content-text">@Model.Descricao</div>
+
+        <div class="section-label">Requisitos</div>
+        <div class="req-list">
+            @foreach (var requisito in Model.Requisitos.Split(',', StringSplitOptions.RemoveEmptyEntries))
+            {
+                <span class="req-item">@requisito.Trim()</span>
+            }
+        </div>
+    </article>
+
+    <aside class="job-side">
+        <h5 class="fw-bold mb-3">Candidatura</h5>
+
+        <p class="text-muted">
+            Publicada em @Model.DataPublicacao.ToString("dd/MM/yyyy")
+        </p>
+
+        @if (Model.DataLimite != null)
+        {
+            <p class="text-muted">
+                Prazo: @Model.DataLimite.Value.ToString("dd/MM/yyyy")
+            </p>
+        }
+
+        @if (User.Identity != null &&
+                     User.Identity.IsAuthenticated &&
+                     User.IsInRole("Estudante"))
+        {
+            @if (jaCandidatou)
+            {
+                <div class="alert alert-success">
+                    Você já se candidatou a esta vaga.
+                </div>
+            }
+            else
+            {
+                <form asp-action="Candidatar" method="post">
+                    <input type="hidden" name="vagaId" value="@Model.Id" />
+
+                    <label class="form-label fw-bold" for="mensagem">
+                        Mensagem opcional
+                    </label>
+
+                    <textarea class="form-control mb-3"
+                              id="mensagem"
+                              name="mensagem"
+                              rows="4"
+                              maxlength="800"
+                              placeholder="Conte rapidamente por que você se interessou pela vaga."></textarea>
+
+                    <button class="btn btn-primary w-100" type="submit">
+                        Inscrever-se na vaga
+                    </button>
+                </form>
+            }
+        }
+        else if (User.Identity != null &&
+                 User.Identity.IsAuthenticated &&
+                 User.IsInRole("Empresa"))
+        {
+            <a asp-action="Candidatos"
+                   asp-route-id="@Model.Id"
+                   class="btn btn-primary w-100">
+                Ver candidatos
+            </a>
+        }
+        else
+        {
+            <a asp-area="Identity"
+                   asp-page="/Account/Login"
+                   class="btn btn-primary w-100">
+                Entrar para se candidatar
+            </a>
+        }
+    </aside>
+</div>

@@ -1,0 +1,202 @@
+@model IEnumerable<LinkAcademico.Models.Vaga>
+
+@{
+    ViewData["Title"] = "Vagas";
+}
+
+<style>
+    .jobs-header {
+        background: linear-gradient(90deg, rgba(15,29,45,.88), rgba(15,66,109,.78)), url('https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=1600&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        border-radius: 16px;
+        color: #fff;
+        padding: 54px;
+        margin-bottom: 24px;
+        box-shadow: 0 18px 42px rgba(23,33,47,.14);
+    }
+
+    .jobs-header h1 {
+        font-weight: 900;
+        margin-bottom: 12px;
+    }
+
+    .jobs-header p {
+        color: rgba(255,255,255,.86);
+        max-width: 680px;
+        line-height: 1.7;
+        margin: 0;
+    }
+
+    .jobs-filter {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 26px;
+        box-shadow: 0 10px 26px rgba(23,33,47,.06);
+    }
+
+    .jobs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+    }
+
+    .job-card {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 12px;
+        padding: 22px;
+        box-shadow: 0 10px 26px rgba(23,33,47,.06);
+        transition: .2s;
+        height: 100%;
+    }
+
+    .job-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 32px rgba(23,33,47,.10);
+    }
+
+    .job-company {
+        color: #15836d;
+        font-weight: 900;
+        font-size: .88rem;
+        margin-bottom: 8px;
+    }
+
+    .job-title {
+        color: #17212f;
+        font-weight: 900;
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+    }
+
+    .job-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .job-pill {
+        background: #f0f4f8;
+        color: #0f426d;
+        border-radius: 999px;
+        padding: 7px 11px;
+        font-size: .82rem;
+        font-weight: 800;
+    }
+
+    .job-desc {
+        color: #667085;
+        line-height: 1.65;
+        margin-bottom: 16px;
+    }
+
+    .empty-state {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 12px;
+        padding: 46px;
+        text-align: center;
+        color: #667085;
+    }
+</style>
+
+<div class="jobs-header">
+    <h1>Vagas abertas</h1>
+    <p>
+        Encontre oportunidades publicadas por empresas parceiras e candidate-se
+        quando seu perfil atender aos requisitos.
+    </p>
+</div>
+
+@if (TempData["Sucesso"] != null)
+{
+    <div class="alert alert-success">@TempData["Sucesso"]</div>
+}
+
+@if (TempData["Erro"] != null)
+{
+    <div class="alert alert-danger">@TempData["Erro"]</div>
+}
+
+<div class="jobs-filter">
+    <form method="get">
+        <div class="row g-2">
+            <div class="col-lg-10">
+                <input class="form-control"
+                       name="busca"
+                       value="@Context.Request.Query["busca"]"
+                       placeholder="Buscar por cargo, empresa ou requisito..." />
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-primary w-100" type="submit">
+                    <i class="bi bi-search me-1"></i>
+                    Buscar
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@if (Model.Any())
+{
+    <div class="jobs-grid">
+        @foreach (var vaga in Model)
+        {
+            <article class="job-card">
+                <div class="job-company">
+                    @(vaga.Empresa?.Nome ?? "Empresa")
+                </div>
+
+                <div class="job-title">
+                    @vaga.Titulo
+                </div>
+
+                <div class="job-meta">
+                    @if (!string.IsNullOrWhiteSpace(vaga.ModeloTrabalho))
+                    {
+                        <span class="job-pill">@vaga.ModeloTrabalho</span>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(vaga.TipoVaga))
+                    {
+                        <span class="job-pill">@vaga.TipoVaga</span>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(vaga.Local))
+                    {
+                        <span class="job-pill">@vaga.Local</span>
+                    }
+                </div>
+
+                <p class="job-desc">
+                    @(vaga.Descricao.Length > 150
+                        ? vaga.Descricao.Substring(0, 150) + "..."
+                        : vaga.Descricao)
+                </p>
+
+                <div class="d-flex justify-content-between align-items-center gap-2">
+                    <span class="text-muted small">
+                        @vaga.Candidaturas.Count candidatura(s)
+                    </span>
+
+                    <a asp-action="Details"
+                       asp-route-id="@vaga.Id"
+                       class="btn btn-outline-primary">
+                        Ver vaga
+                    </a>
+                </div>
+            </article>
+        }
+    </div>
+}
+else
+{
+    <div class="empty-state">
+        <h4>Nenhuma vaga encontrada</h4>
+        <p class="mb-0">Tente buscar por outro termo ou volte mais tarde.</p>
+    </div>
+}

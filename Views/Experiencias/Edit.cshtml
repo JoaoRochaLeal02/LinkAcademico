@@ -1,0 +1,319 @@
+﻿@model LinkAcademico.Models.Experiencia
+
+@{
+    ViewData["Title"] = "Editar Experiência";
+}
+
+<style>
+
+    body {
+        background: #f4f7fb;
+    }
+
+    .exp-container {
+        max-width: 950px;
+        margin: 50px auto;
+    }
+
+    .exp-card {
+        background: white;
+        border-radius: 28px;
+        padding: 40px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.08);
+        border: 1px solid #ececec;
+    }
+
+    .exp-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #0a66c2;
+        margin-bottom: 10px;
+    }
+
+    .exp-subtitle {
+        color: #666;
+        margin-bottom: 35px;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 14px;
+        height: 54px;
+        border: 1px solid #dcdcdc;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #0a66c2;
+            box-shadow: 0 0 0 .15rem rgba(10,102,194,.12);
+        }
+
+    textarea.form-control {
+        height: auto;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1d1d1d;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #0a66c2, #004182);
+        border: none;
+        border-radius: 30px;
+        height: 54px;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: .2s;
+    }
+
+        .btn-save:hover {
+            opacity: .95;
+            transform: translateY(-1px);
+        }
+
+    .preview-image {
+        width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 18px;
+        margin-top: 15px;
+        border: 1px solid #ececec;
+    }
+
+</style>
+
+<div class="container exp-container">
+
+    <div class="exp-card">
+
+        <div class="exp-title">
+            Editar Experiência
+        </div>
+
+        <div class="exp-subtitle">
+            Atualize as informações da sua experiência acadêmica.
+        </div>
+
+        <form asp-action="Edit" method="post">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-4">
+            </div>
+
+            <div class="row">
+
+                <!-- TÍTULO -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Titulo"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Titulo"
+                           class="form-control" />
+
+                    <span asp-validation-for="Titulo"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- DATA -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Data"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Data"
+                           type="date"
+                           class="form-control" />
+
+                    <span asp-validation-for="Data"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- CATEGORIA -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Categoria"
+                           class="form-label">
+                    </label>
+
+                    <select asp-for="Categoria"
+                            class="form-select"
+                            asp-items="Html.GetEnumSelectList<CategoriaExperiencia>()">
+                    </select>
+
+                </div>
+
+                <!-- TIPO DE ATIVIDADE -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="TipoAtividade"
+                           class="form-label">
+                    </label>
+
+                    <select asp-for="TipoAtividade"
+                            class="form-select"
+                            asp-items="Html.GetEnumSelectList<TipoAtividade>()">
+                    </select>
+
+                    <span asp-validation-for="TipoAtividade"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- INSTITUIÇÃO -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Instituicao"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Instituicao"
+                           class="form-control" />
+
+                </div>
+
+                <!-- COMPETÊNCIAS -->
+
+                <div class="col-12 mb-4">
+
+                    <label asp-for="Competencias"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Competencias"
+                           class="form-control" />
+
+                </div>
+
+                <!-- DESCRIÇÃO -->
+
+                <div class="col-12 mb-4">
+
+                    <label asp-for="Descricao"
+                           class="form-label">
+                    </label>
+
+                    <textarea asp-for="Descricao"
+                              rows="5"
+                              class="form-control"></textarea>
+
+                    <span asp-validation-for="Descricao"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- IMAGEM -->
+
+                <div class="col-12 mb-4">
+
+                    <label asp-for="ImagemUrl"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="ImagemUrl"
+                           id="imagemInput"
+                           class="form-control" />
+
+                    @if (!string.IsNullOrEmpty(Model.ImagemUrl))
+                    {
+                        <img src="@Model.ImagemUrl"
+                             id="previewImagem"
+                             class="preview-image" />
+                    }
+                    else
+                    {
+                        <img id="previewImagem"
+                             class="preview-image"
+                             style="display:none;" />
+                    }
+
+                </div>
+
+                <!-- LINK PROJETO -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="ProjetoUrl"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="ProjetoUrl"
+                           class="form-control" />
+
+                </div>
+
+                <!-- CERTIFICADO -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="CertificadoUrl"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="CertificadoUrl"
+                           class="form-control" />
+
+                </div>
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary btn-save w-100">
+
+                Atualizar Experiência
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        const imagemInput = document.getElementById("imagemInput");
+        const previewImagem = document.getElementById("previewImagem");
+
+        imagemInput.addEventListener("input", function () {
+
+            const url = imagemInput.value;
+
+            if (url) {
+
+                previewImagem.src = url;
+                previewImagem.style.display = "block";
+
+            } else {
+
+                previewImagem.style.display = "none";
+
+            }
+
+        });
+
+    </script>
+}

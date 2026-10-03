@@ -1,0 +1,344 @@
+﻿@model LinkAcademico.Models.Estudante
+
+@{
+    ViewData["Title"] = "Criar Perfil";
+}
+
+<style>
+
+    body {
+        background: #f4f7fb;
+    }
+
+    .student-container {
+        max-width: 950px;
+        margin: 50px auto;
+    }
+
+    .student-card {
+        background: white;
+        border-radius: 30px;
+        padding: 45px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.08);
+        border: 1px solid #ececec;
+    }
+
+    .student-title {
+        font-size: 2.3rem;
+        font-weight: 800;
+        color: #0a66c2;
+        margin-bottom: 10px;
+    }
+
+    .student-subtitle {
+        color: #666;
+        margin-bottom: 35px;
+    }
+
+    .form-control {
+        border-radius: 14px;
+        border: 1px solid #dcdcdc;
+        min-height: 54px;
+    }
+
+        .form-control:focus {
+            border-color: #0a66c2;
+            box-shadow: 0 0 0 .15rem rgba(10,102,194,.12);
+        }
+
+    textarea.form-control {
+        height: auto;
+    }
+
+    .form-label {
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #1d1d1d;
+    }
+
+    .btn-save {
+        background: linear-gradient(135deg, #0a66c2, #004182);
+        border: none;
+        border-radius: 30px;
+        height: 56px;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: .2s;
+    }
+
+        .btn-save:hover {
+            opacity: .95;
+            transform: translateY(-1px);
+        }
+
+    .preview-image {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-top: 18px;
+        border: 5px solid #e9ecef;
+        display: none;
+    }
+
+</style>
+
+<div class="container student-container">
+
+    <div class="student-card">
+
+        <div class="student-title">
+            Criar Perfil Acadêmico
+        </div>
+
+        <div class="student-subtitle">
+            Complete suas informações profissionais e acadêmicas.
+        </div>
+
+        <form asp-action="Create"
+              method="post"
+              enctype="multipart/form-data">
+
+            <!-- ERROS -->
+
+            <div asp-validation-summary="All"
+                 class="text-danger mb-4">
+            </div>
+
+            <div class="row">
+
+                <!-- NOME -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Nome"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Nome"
+                           class="form-control"
+                           placeholder="Seu nome completo" />
+
+                    <span asp-validation-for="Nome"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- CURSO -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Curso"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Curso"
+                           class="form-control"
+                           placeholder="Ciência da Computação" />
+
+                    <span asp-validation-for="Curso"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- EMAIL -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Email"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Email"
+                           class="form-control"
+                           placeholder="seuemail@email.com" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger">
+                    </span>
+
+                </div>
+
+                <!-- TELEFONE -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Telefone"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Telefone"
+                           class="form-control"
+                           placeholder="(35) 99999-9999" />
+
+                </div>
+
+                <!-- FOTO -->
+
+                <div class="col-12 mb-4">
+
+                    <label class="form-label">
+
+                        Foto de Perfil
+
+                    </label>
+
+                    <input name="FotoUpload"
+                           type="file"
+                           accept="image/*"
+                           class="form-control"
+                           id="fotoInput" />
+
+                    <!-- PREVIEW -->
+
+                    <img id="previewFoto"
+                         class="preview-image" />
+
+                </div>
+
+                <!-- CIDADE -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Cidade"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Cidade"
+                           class="form-control"
+                           placeholder="Alfenas/MG" />
+
+                </div>
+
+                <!-- PERÍODO -->
+
+                <div class="col-md-6 mb-4">
+
+                    <label asp-for="Periodo"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Periodo"
+                           class="form-control"
+                           placeholder="5º período" />
+
+                </div>
+
+                <!-- HABILIDADES -->
+
+                <div class="col-12 mb-4">
+
+                    <label asp-for="Habilidades"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Habilidades"
+                           class="form-control"
+                           placeholder="C#, SQL, ASP.NET..." />
+
+                </div>
+
+                <!-- BIO -->
+
+                <div class="col-12 mb-4">
+
+                    <label asp-for="Bio"
+                           class="form-label">
+                    </label>
+
+                    <textarea asp-for="Bio"
+                              rows="5"
+                              class="form-control"
+                              placeholder="Fale sobre você..."></textarea>
+
+                </div>
+
+                <!-- GITHUB -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label asp-for="GitHub"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="GitHub"
+                           class="form-control"
+                           placeholder="https://github.com/..." />
+
+                </div>
+
+                <!-- LINKEDIN -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label asp-for="LinkedIn"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="LinkedIn"
+                           class="form-control"
+                           placeholder="https://linkedin.com/in/..." />
+
+                </div>
+
+                <!-- PORTFÓLIO -->
+
+                <div class="col-md-4 mb-4">
+
+                    <label asp-for="Portfolio"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Portfolio"
+                           class="form-control"
+                           placeholder="https://..." />
+
+                </div>
+
+            </div>
+
+            <button type="submit"
+                    class="btn btn-primary btn-save w-100">
+
+                Salvar Perfil
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        const fotoInput =
+            document.getElementById("fotoInput");
+
+        const preview =
+            document.getElementById("previewFoto");
+
+        fotoInput.addEventListener("change", function () {
+
+            const arquivo = this.files[0];
+
+            if (arquivo)
+            {
+                preview.src =
+                    URL.createObjectURL(arquivo);
+
+                preview.style.display = "block";
+            }
+
+        });
+
+    </script>
+}

@@ -1,0 +1,712 @@
+﻿@model LinkAcademico.Models.Experiencia
+
+@{
+    ViewData["Title"] = "Nova Experiência";
+}
+
+<style>
+
+    body {
+        background: linear-gradient(to bottom, #eef4fb 0%, #f4f7fb 220px);
+    }
+
+    .exp-container {
+        max-width: 1250px;
+        margin: 40px auto 70px auto;
+    }
+
+    /* HERO */
+
+    .create-hero {
+        position: relative;
+        overflow: hidden;
+        border-radius: 34px;
+        padding: 70px 60px;
+        background: linear-gradient( 135deg, rgba(10,102,194,.95), rgba(0,65,130,.95)), url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        box-shadow: 0 18px 45px rgba(0,0,0,.12);
+        margin-bottom: 40px;
+    }
+
+        .create-hero::before {
+            content: "";
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.05);
+            top: -220px;
+            right: -140px;
+        }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 18px;
+        max-width: 700px;
+        line-height: 1.2;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        max-width: 760px;
+        line-height: 1.9;
+        opacity: .95;
+    }
+
+    .hero-tags {
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .hero-tag {
+        background: rgba(255,255,255,.12);
+        border: 1px solid rgba(255,255,255,.12);
+        backdrop-filter: blur(8px);
+        color: white;
+        padding: 10px 16px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: .92rem;
+    }
+
+    /* LAYOUT */
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+    }
+
+    /* CARD */
+
+    .exp-card {
+        background: white;
+        border-radius: 30px;
+        padding: 38px;
+        border: 1px solid #ececec;
+        box-shadow: 0 15px 35px rgba(0,0,0,.06);
+    }
+
+    .card-title {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #1d1d1d;
+        margin-bottom: 10px;
+    }
+
+    .card-subtitle {
+        color: #666;
+        margin-bottom: 35px;
+    }
+
+    /* FORM */
+
+    .form-control,
+    .form-select {
+        border-radius: 16px;
+        min-height: 56px;
+        border: 1px solid #dcdcdc;
+        background: #fcfdff;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #0a66c2;
+            box-shadow: 0 0 0 .15rem rgba(10,102,194,.12);
+            background: white;
+        }
+
+    textarea.form-control {
+        min-height: 180px;
+    }
+
+    .form-label {
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #1d1d1d;
+    }
+
+    .form-hint {
+        color: #777;
+        font-size: .9rem;
+        margin-top: 8px;
+    }
+
+    /* PREVIEW */
+
+    .preview-card {
+        background: white;
+        border-radius: 30px;
+        border: 1px solid #ececec;
+        overflow: hidden;
+        box-shadow: 0 15px 35px rgba(0,0,0,.06);
+        position: sticky;
+        top: 25px;
+    }
+
+    .preview-cover {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+        background: linear-gradient(135deg, #0a66c2, #004182);
+    }
+
+    .preview-content {
+        padding: 30px;
+    }
+
+    .preview-category {
+        display: inline-block;
+        background: #eef4fb;
+        color: #0a66c2;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-size: .85rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+
+    .preview-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #1d1d1d;
+        margin-bottom: 14px;
+        line-height: 1.4;
+    }
+
+    .preview-description {
+        color: #666;
+        line-height: 1.8;
+    }
+
+    /* SECTIONS */
+
+    .form-section {
+        margin-bottom: 38px;
+    }
+
+    .section-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #1d1d1d;
+        margin-bottom: 22px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* BUTTON */
+
+    .btn-save {
+        background: linear-gradient(135deg, #0a66c2, #004182);
+        border: none;
+        border-radius: 30px;
+        height: 58px;
+        font-weight: 700;
+        font-size: 1rem;
+        transition: .2s;
+        box-shadow: 0 10px 25px rgba(10,102,194,.18);
+    }
+
+        .btn-save:hover {
+            opacity: .96;
+            transform: translateY(-2px);
+        }
+
+    .btn-back {
+        border-radius: 30px;
+        height: 58px;
+        font-weight: 700;
+    }
+
+    /* ALERT */
+
+    .validation-box {
+        background: #fff5f5;
+        border: 1px solid #ffd6d6;
+        border-radius: 18px;
+        padding: 16px 18px;
+        margin-bottom: 25px;
+    }
+
+    /* RESPONSIVO */
+
+    @@media (max-width: 992px) {
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .create-hero {
+            padding: 55px 35px;
+        }
+
+        .hero-title {
+            font-size: 2.3rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .exp-card {
+            padding: 25px;
+        }
+    }
+
+</style>
+
+<div class="container exp-container">
+
+    <!-- HERO -->
+
+    <div class="create-hero">
+
+        <div class="hero-content">
+
+            <div class="hero-title">
+                Compartilhe sua experiência acadêmica com o mundo
+            </div>
+
+            <div class="hero-subtitle">
+                Mostre projetos, pesquisas, certificados,
+                extensões e experiências profissionais para
+                fortalecer seu perfil dentro da plataforma.
+            </div>
+
+            <div class="hero-tags">
+
+                <div class="hero-tag">
+                    🚀 Projetos
+                </div>
+
+                <div class="hero-tag">
+                    📚 Certificados
+                </div>
+
+                <div class="hero-tag">
+                    💼 Experiências
+                </div>
+
+                <div class="hero-tag">
+                    🧠 Competências
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- GRID -->
+
+    <div class="form-grid">
+
+        <!-- FORMULÁRIO -->
+
+        <div>
+
+            <div class="exp-card">
+
+                <div class="card-title">
+                    Nova Experiência Acadêmica
+                </div>
+
+                <div class="card-subtitle">
+                    Preencha os dados abaixo para publicar sua experiência.
+                </div>
+
+                <form asp-action="Create"
+                      method="post">
+
+                    <!-- ERROS -->
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="validation-box text-danger">
+                    </div>
+
+                    <!-- DADOS PRINCIPAIS -->
+
+                    <div class="form-section">
+
+                        <div class="section-title">
+
+                            <i class="bi bi-stars"></i>
+
+                            Informações principais
+
+                        </div>
+
+                        <div class="row">
+
+                            <!-- TÍTULO -->
+
+                            <div class="col-md-6 mb-4">
+
+                                <label asp-for="Titulo"
+                                       class="form-label">
+                                </label>
+
+                                <input asp-for="Titulo"
+                                       class="form-control"
+                                       id="tituloInput"
+                                       placeholder="Ex: Sistema Hospitalar" />
+
+                                <span asp-validation-for="Titulo"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- DATA -->
+
+                            <div class="col-md-6 mb-4">
+
+                                <label asp-for="Data"
+                                       class="form-label">
+                                </label>
+
+                                <input asp-for="Data"
+                                       class="form-control"
+                                       type="date" />
+
+                                <span asp-validation-for="Data"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- CATEGORIA -->
+
+                            <div class="col-md-6 mb-4">
+
+                                <label asp-for="Categoria"
+                                       class="form-label">
+                                </label>
+
+                                <select asp-for="Categoria"
+                                        id="categoriaInput"
+                                        class="form-select"
+                                        asp-items="Html.GetEnumSelectList<CategoriaExperiencia>()">
+                                </select>
+
+                                <span asp-validation-for="Categoria"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- TIPO DE ATIVIDADE -->
+
+                            <div class="col-md-6 mb-4">
+
+                                <label asp-for="TipoAtividade"
+                                       class="form-label">
+                                </label>
+
+                                <select asp-for="TipoAtividade"
+                                        id="tipoAtividadeInput"
+                                        class="form-select"
+                                        asp-items="Html.GetEnumSelectList<TipoAtividade>()">
+                                </select>
+
+                                <span asp-validation-for="TipoAtividade"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <!-- INSTITUIÇÃO -->
+
+                            <div class="col-md-6 mb-4">
+
+                                <label asp-for="Instituicao"
+                                       class="form-label">
+                                </label>
+
+                                <input asp-for="Instituicao"
+                                       class="form-control"
+                                       placeholder="UNIFENAS, Empresa..." />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- DESCRIÇÃO -->
+
+                    <div class="form-section">
+
+                        <div class="section-title">
+
+                            <i class="bi bi-file-text-fill"></i>
+
+                            Descrição do projeto
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label asp-for="Descricao"
+                                   class="form-label">
+                            </label>
+
+                            <textarea asp-for="Descricao"
+                                      id="descricaoInput"
+                                      rows="6"
+                                      class="form-control"
+                                      placeholder="Explique os objetivos, tecnologias, resultados e aprendizados do projeto..."></textarea>
+
+                            <span asp-validation-for="Descricao"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <!-- COMPETÊNCIAS -->
+
+                    <div class="form-section">
+
+                        <div class="section-title">
+
+                            <i class="bi bi-lightning-charge-fill"></i>
+
+                            Competências
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label asp-for="Competencias"
+                                   class="form-label">
+                            </label>
+
+                            <input asp-for="Competencias"
+                                   class="form-control"
+                                   placeholder="C#, SQL, ASP.NET, React..." />
+
+                            <div class="form-hint">
+                                Separe as competências utilizando vírgulas.
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- LINKS -->
+
+                    <div class="form-section">
+
+                        <div class="section-title">
+
+                            <i class="bi bi-link-45deg"></i>
+
+                            Links e mídia
+
+                        </div>
+
+                        <div class="row">
+
+                            <!-- IMAGEM -->
+
+                            <div class="col-12 mb-4">
+
+                                <label asp-for="ImagemUrl"
+                                       class="form-label">
+                                </label>
+
+                                <input asp-for="ImagemUrl"
+                                       id="imagemInput"
+                                       class="form-control"
+                                       placeholder="https://imagem.com/projeto.jpg" />
+
+                            </div>
+
+                            <!-- PROJETO -->
+
+                            <div class="col-md-6 mb-4">
+
+                                <label asp-for="ProjetoUrl"
+                                       class="form-label">
+                                </label>
+
+                                <input asp-for="ProjetoUrl"
+                                       class="form-control"
+                                       placeholder="GitHub, Deploy..." />
+
+                            </div>
+
+                            <!-- CERTIFICADO -->
+
+                            <div class="col-md-6 mb-4">
+
+                                <label asp-for="CertificadoUrl"
+                                       class="form-label">
+                                </label>
+
+                                <input asp-for="CertificadoUrl"
+                                       class="form-control"
+                                       placeholder="Link do certificado" />
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- BOTÕES -->
+
+                    <div class="d-flex gap-3 flex-wrap">
+
+                        <button type="submit"
+                                class="btn btn-primary btn-save flex-grow-1">
+
+                            <i class="bi bi-check-circle-fill me-2"></i>
+
+                            Publicar Experiência
+
+                        </button>
+
+                        <a asp-action="Index"
+                               class="btn btn-outline-secondary btn-back px-4">
+
+                            Voltar
+
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- PREVIEW -->
+
+        <div>
+
+            <div class="preview-card">
+
+                <img id="previewImagem"
+                     class="preview-cover"
+                     src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3" />
+
+                <div class="preview-content">
+
+                    <div class="preview-category"
+                         id="previewCategoria">
+
+                        Projeto
+
+                    </div>
+
+                    <div class="preview-title"
+                         id="previewTitulo">
+
+                        Título da experiência
+
+                    </div>
+
+                    <div class="preview-description"
+                         id="previewDescricao">
+
+                        A descrição do projeto aparecerá aqui conforme você preencher o formulário.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+
+        const tituloInput =
+            document.getElementById("tituloInput");
+
+        const descricaoInput =
+            document.getElementById("descricaoInput");
+
+        const categoriaInput =
+            document.getElementById("categoriaInput");
+
+        const imagemInput =
+            document.getElementById("imagemInput");
+
+        const previewTitulo =
+            document.getElementById("previewTitulo");
+
+        const previewDescricao =
+            document.getElementById("previewDescricao");
+
+        const previewCategoria =
+            document.getElementById("previewCategoria");
+
+        const previewImagem =
+            document.getElementById("previewImagem");
+
+        tituloInput.addEventListener("input", function () {
+
+            previewTitulo.innerText =
+                tituloInput.value || "Título da experiência";
+
+        });
+
+        descricaoInput.addEventListener("input", function () {
+
+            previewDescricao.innerText =
+                descricaoInput.value ||
+                "A descrição do projeto aparecerá aqui conforme você preencher o formulário.";
+
+        });
+
+        categoriaInput.addEventListener("change", function () {
+
+            previewCategoria.innerText =
+                categoriaInput.options[
+                    categoriaInput.selectedIndex
+                ].text;
+
+        });
+
+        imagemInput.addEventListener("input", function () {
+
+            const url = imagemInput.value;
+
+            if (url)
+            {
+                previewImagem.src = url;
+            }
+
+        });
+
+    </script>
+}

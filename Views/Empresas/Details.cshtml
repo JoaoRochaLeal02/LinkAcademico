@@ -1,0 +1,710 @@
+@model LinkAcademico.Models.Empresa
+
+@{
+    ViewData["Title"] = "Empresa";
+
+    var vagas = Model.Vagas ?? new List<LinkAcademico.Models.Vaga>();
+    var vagasAtivas = vagas.Where(v => v.Ativa).ToList();
+    var vagasRecentes = vagasAtivas
+        .OrderByDescending(v => v.DataPublicacao)
+        .Take(3)
+        .ToList();
+    var tecnologias = string.IsNullOrWhiteSpace(Model.Tecnologias)
+        ? Array.Empty<string>()
+        : Model.Tecnologias
+            .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .ToArray();
+    var perfilItens = new[]
+    {
+        !string.IsNullOrWhiteSpace(Model.FotoPerfil),
+        !string.IsNullOrWhiteSpace(Model.Descricao),
+        !string.IsNullOrWhiteSpace(Model.OQueBusca),
+        tecnologias.Any(),
+        vagas.Any()
+    };
+    var perfilCompleto = (int)Math.Round(perfilItens.Count(item => item) * 100.0 / perfilItens.Length);
+}
+
+<style>
+    body {
+        background: #f4f7fb;
+    }
+
+    .company-profile {
+        max-width: 1220px;
+        margin: 28px auto 56px;
+    }
+
+    .profile-hero {
+        min-height: 310px;
+        border-radius: 8px;
+        background: linear-gradient(120deg, rgba(15,66,109,.96), rgba(21,131,109,.86)), url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1400&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        color: #fff;
+        padding: 34px;
+        display: flex;
+        align-items: flex-end;
+        box-shadow: 0 18px 38px rgba(23,33,47,.14);
+    }
+
+    .hero-content {
+        width: 100%;
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: end;
+    }
+
+    .company-logo {
+        width: 132px;
+        height: 132px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #1769aa, #15836d);
+        border: 4px solid rgba(255,255,255,.92);
+        box-shadow: 0 14px 32px rgba(0,0,0,.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+    }
+
+        .company-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .company-logo i {
+            color: #fff;
+            font-size: 3.3rem;
+        }
+
+    .company-name {
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        font-weight: 900;
+        line-height: 1.05;
+        margin: 0 0 10px;
+        word-break: break-word;
+    }
+
+    .company-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .meta-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(255,255,255,.22);
+        background: rgba(255,255,255,.13);
+        color: #fff;
+        border-radius: 8px;
+        padding: 9px 12px;
+        font-weight: 800;
+        backdrop-filter: blur(12px);
+    }
+
+    .hero-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+        .hero-actions .btn {
+            border-radius: 8px;
+            white-space: nowrap;
+        }
+
+    .profile-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 340px;
+        gap: 22px;
+        margin-top: 22px;
+    }
+
+    .profile-panel,
+    .side-panel {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 8px;
+        box-shadow: 0 12px 30px rgba(23,33,47,.06);
+    }
+
+    .profile-panel {
+        padding: 28px;
+        margin-bottom: 22px;
+    }
+
+    .side-panel {
+        padding: 22px;
+        margin-bottom: 18px;
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .section-title {
+        color: #17212f;
+        font-size: 1.25rem;
+        font-weight: 900;
+        margin: 0;
+    }
+
+    .section-kicker {
+        color: #667085;
+        font-weight: 700;
+        font-size: .9rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .stat-box {
+        background: #f7fafc;
+        border: 1px solid #e3eaf2;
+        border-radius: 8px;
+        padding: 18px;
+    }
+
+    .stat-number {
+        color: #0f426d;
+        font-size: 1.85rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    .stat-label {
+        color: #667085;
+        margin-top: 8px;
+        font-weight: 700;
+    }
+
+    .content-text {
+        color: #5d6b7a;
+        line-height: 1.8;
+        white-space: pre-line;
+    }
+
+    .highlight-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .highlight-item {
+        border: 1px solid #e3eaf2;
+        border-radius: 8px;
+        padding: 18px;
+        background: #fbfdff;
+    }
+
+    .highlight-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 8px;
+        background: #edf7f4;
+        color: #116450;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+        font-size: 1.15rem;
+    }
+
+    .highlight-title {
+        color: #17212f;
+        font-weight: 900;
+        margin-bottom: 6px;
+    }
+
+    .highlight-copy {
+        color: #667085;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .job-list {
+        display: grid;
+        gap: 12px;
+    }
+
+    .job-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 16px;
+        align-items: center;
+        border: 1px solid #e3eaf2;
+        border-radius: 8px;
+        padding: 18px;
+        color: inherit;
+        text-decoration: none;
+        transition: .2s ease;
+    }
+
+        .job-card:hover,
+        .job-card:focus {
+            border-color: #1769aa;
+            box-shadow: 0 10px 24px rgba(23,105,170,.1);
+            transform: translateY(-2px);
+            color: inherit;
+        }
+
+    .job-title {
+        color: #17212f;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
+
+    .job-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+    }
+
+    .job-pill,
+    .tech-pill {
+        background: #f0f4f8;
+        color: #0f426d;
+        border-radius: 999px;
+        padding: 7px 10px;
+        font-size: .82rem;
+        font-weight: 800;
+    }
+
+    .job-arrow {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        background: #edf7f4;
+        color: #116450;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .empty-state {
+        border: 1px dashed #cbd5e1;
+        border-radius: 8px;
+        padding: 20px;
+        color: #667085;
+        background: #fbfdff;
+    }
+
+    .tech-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .contact-line {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        color: #667085;
+        margin-bottom: 14px;
+        word-break: break-word;
+    }
+
+        .contact-line i {
+            color: #1769aa;
+            margin-top: 2px;
+        }
+
+    .progress {
+        height: 10px;
+        border-radius: 999px;
+        background: #e8eef5;
+    }
+
+    .progress-bar {
+        background: linear-gradient(90deg, #1769aa, #15836d);
+    }
+
+    .check-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .check-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #5d6b7a;
+        font-weight: 700;
+    }
+
+        .check-item i {
+            color: #15836d;
+        }
+
+    @@media (max-width: 1100px) {
+        .profile-layout,
+        .hero-content {
+            grid-template-columns: 1fr;
+        }
+
+        .hero-actions {
+            justify-content: flex-start;
+        }
+
+        .stats-grid,
+        .highlight-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @@media (max-width: 640px) {
+        .company-profile {
+            margin-top: 0;
+        }
+
+        .profile-hero,
+        .profile-panel,
+        .side-panel {
+            border-radius: 0;
+            border-left: 0;
+            border-right: 0;
+        }
+
+        .profile-hero,
+        .profile-panel {
+            padding: 24px;
+        }
+
+        .stats-grid,
+        .highlight-grid,
+        .job-card {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="company-profile">
+    <section class="profile-hero">
+        <div class="hero-content">
+            <div class="company-logo">
+                @if (!string.IsNullOrEmpty(Model.FotoPerfil))
+                {
+                    <img src="@Url.Content(Model.FotoPerfil)"
+                         alt="Logo da empresa @Model.Nome" />
+                }
+                else
+                {
+                    <i class="bi bi-building-fill"></i>
+                }
+            </div>
+
+            <div>
+                <h1 class="company-name">@Model.Nome</h1>
+
+                <div class="company-meta">
+                    <span class="meta-pill">
+                        <i class="bi bi-briefcase-fill"></i>
+                        @(string.IsNullOrWhiteSpace(Model.AreaAtuacao) ? "Area nao informada" : Model.AreaAtuacao)
+                    </span>
+                    <span class="meta-pill">
+                        <i class="bi bi-patch-check-fill"></i>
+                        Empresa parceira
+                    </span>
+                    @if (Model.EhEgressoEmpreendedor)
+                    {
+                        <span class="meta-pill">
+                            <i class="bi bi-mortarboard-fill"></i>
+                            Egresso empreendedor
+                        </span>
+                    }
+                    <span class="meta-pill">
+                        <i class="bi bi-lightning-charge-fill"></i>
+                        @vagasAtivas.Count vaga(s) ativa(s)
+                    </span>
+                </div>
+            </div>
+
+            <div class="hero-actions">
+                @if (!string.IsNullOrWhiteSpace(Model.Email))
+                {
+                    <a class="btn btn-light"
+                           href="mailto:@Model.Email">
+                        <i class="bi bi-envelope me-2"></i>
+                        Contatar
+                    </a>
+                }
+
+                @if (ViewBag.EhDono == true)
+                {
+                    <a asp-action="Edit"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-outline-light">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Editar perfil
+                    </a>
+                }
+            </div>
+        </div>
+    </section>
+
+    <div class="profile-layout">
+        <main>
+            <section class="profile-panel">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">@vagas.Count</div>
+                        <div class="stat-label">Vagas publicadas</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">@vagasAtivas.Count</div>
+                        <div class="stat-label">Oportunidades ativas</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">@tecnologias.Length</div>
+                        <div class="stat-label">Tecnologias citadas</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">@perfilCompleto%</div>
+                        <div class="stat-label">Perfil preenchido</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="profile-panel">
+                <div class="section-heading">
+                    <h2 class="section-title">Sobre a empresa</h2>
+                    <span class="section-kicker">Apresentacao</span>
+                </div>
+
+                <div class="content-text">
+                    @(string.IsNullOrWhiteSpace(Model.Descricao)
+                        ? "Nenhuma descricao cadastrada."
+                        : Model.Descricao)
+                </div>
+            </section>
+
+            <section class="profile-panel">
+                <div class="section-heading">
+                    <h2 class="section-title">Como e trabalhar com a empresa</h2>
+                    <span class="section-kicker">Para estudantes</span>
+                </div>
+
+                <div class="highlight-grid">
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="bi bi-stars"></i>
+                        </div>
+                        <div class="highlight-title">O que valorizamos</div>
+                        <p class="highlight-copy">
+                            @(string.IsNullOrWhiteSpace(Model.OQueBusca)
+                                ? "A empresa ainda nao informou o perfil de estudante que procura."
+                                : Model.OQueBusca)
+                        </p>
+                    </div>
+
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="bi bi-tools"></i>
+                        </div>
+                        <div class="highlight-title">Stack e areas</div>
+                        <p class="highlight-copy">
+                            @(tecnologias.Any()
+                                ? string.Join(", ", tecnologias.Take(6))
+                                : "Tecnologias e areas ainda nao cadastradas.")
+                        </p>
+                    </div>
+
+                    <div class="highlight-item">
+                        <div class="highlight-icon">
+                            <i class="bi bi-send-check"></i>
+                        </div>
+                        <div class="highlight-title">Proximo passo</div>
+                        <p class="highlight-copy">
+                            Veja as vagas abertas e escolha uma oportunidade alinhada ao seu momento.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="profile-panel">
+                <div class="section-heading">
+                    <h2 class="section-title">Vagas em destaque</h2>
+                    @if (vagasAtivas.Count > 3)
+                    {
+                        <span class="section-kicker">@vagasAtivas.Count vagas ativas</span>
+                    }
+                </div>
+
+                @if (vagasRecentes.Any())
+                {
+                    <div class="job-list">
+                        @foreach (var vaga in vagasRecentes)
+                        {
+                            <a asp-controller="Vagas"
+                                   asp-action="Details"
+                                   asp-route-id="@vaga.Id"
+                                   class="job-card">
+                                <div>
+                                    <div class="job-title">@vaga.Titulo</div>
+                                    <div class="job-meta">
+                                        @if (!string.IsNullOrWhiteSpace(vaga.TipoVaga))
+                                        {
+                                            <span class="job-pill">@vaga.TipoVaga</span>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(vaga.ModeloTrabalho))
+                                        {
+                                            <span class="job-pill">@vaga.ModeloTrabalho</span>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(vaga.Local))
+                                        {
+                                            <span class="job-pill">@vaga.Local</span>
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(vaga.Remuneracao))
+                                        {
+                                            <span class="job-pill">@vaga.Remuneracao</span>
+                                        }
+                                    </div>
+                                </div>
+                                <span class="job-arrow">
+                                    <i class="bi bi-arrow-right"></i>
+                                </span>
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        Esta empresa ainda nao possui vagas ativas publicadas.
+                    </div>
+                }
+            </section>
+        </main>
+
+        <aside>
+            <section class="side-panel">
+                <h2 class="section-title mb-3">Contato</h2>
+
+                <div class="contact-line">
+                    <i class="bi bi-envelope-fill"></i>
+                    <span>@(string.IsNullOrWhiteSpace(Model.Email) ? "E-mail nao informado" : Model.Email)</span>
+                </div>
+
+                <div class="contact-line">
+                    <i class="bi bi-briefcase-fill"></i>
+                    <span>@(string.IsNullOrWhiteSpace(Model.AreaAtuacao) ? "Area nao informada" : Model.AreaAtuacao)</span>
+                </div>
+
+                @if (Model.EhEgressoEmpreendedor)
+                {
+                    <div class="contact-line">
+                        <i class="bi bi-mortarboard-fill"></i>
+                        <span>Egresso empreendedor</span>
+                    </div>
+                }
+
+                @if (!string.IsNullOrWhiteSpace(Model.Email))
+                {
+                    <a class="btn btn-primary w-100"
+                           href="mailto:@Model.Email">
+                        <i class="bi bi-send me-2"></i>
+                        Enviar e-mail
+                    </a>
+                }
+            </section>
+
+            <section class="side-panel">
+                <h2 class="section-title mb-3">Tecnologias</h2>
+
+                @if (tecnologias.Any())
+                {
+                    <div class="tech-cloud">
+                        @foreach (var tecnologia in tecnologias)
+                        {
+                            <span class="tech-pill">@tecnologia</span>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="empty-state">
+                        Nenhuma tecnologia cadastrada.
+                    </div>
+                }
+            </section>
+
+            <section class="side-panel">
+                <div class="section-heading">
+                    <h2 class="section-title">Perfil</h2>
+                    <span class="section-kicker">@perfilCompleto%</span>
+                </div>
+
+                <div class="progress"
+                     role="progressbar"
+                     aria-valuenow="@perfilCompleto"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                    <div class="progress-bar"
+                         style="width: @perfilCompleto%">
+                    </div>
+                </div>
+
+                <div class="check-list">
+                    <div class="check-item">
+                        <i class="bi @(string.IsNullOrWhiteSpace(Model.FotoPerfil) ? "bi-circle" : "bi-check-circle-fill")"></i>
+                        Logo da empresa
+                    </div>
+                    <div class="check-item">
+                        <i class="bi @(string.IsNullOrWhiteSpace(Model.Descricao) ? "bi-circle" : "bi-check-circle-fill")"></i>
+                        Descricao institucional
+                    </div>
+                    <div class="check-item">
+                        <i class="bi @(string.IsNullOrWhiteSpace(Model.OQueBusca) ? "bi-circle" : "bi-check-circle-fill")"></i>
+                        Perfil buscado
+                    </div>
+                    <div class="check-item">
+                        <i class="bi @(tecnologias.Any() ? "bi-check-circle-fill" : "bi-circle")"></i>
+                        Tecnologias
+                    </div>
+                    <div class="check-item">
+                        <i class="bi @(vagas.Any() ? "bi-check-circle-fill" : "bi-circle")"></i>
+                        Vagas publicadas
+                    </div>
+                </div>
+            </section>
+
+            @if (ViewBag.EhDono == true)
+            {
+                <section class="side-panel">
+                    <h2 class="section-title mb-3">Acoes rapidas</h2>
+
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Vagas"
+                               asp-action="Create"
+                               class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>
+                            Publicar vaga
+                        </a>
+                        <a asp-action="Edit"
+                               asp-route-id="@Model.Id"
+                               class="btn btn-outline-primary">
+                            <i class="bi bi-pencil-square me-2"></i>
+                            Atualizar perfil
+                        </a>
+                    </div>
+                </section>
+            }
+        </aside>
+    </div>
+</div>

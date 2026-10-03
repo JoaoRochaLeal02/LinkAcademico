@@ -1,0 +1,36 @@
+﻿@model LinkAcademico.Models.Contato
+
+@{
+    ViewData["Title"] = "Entrar em Contato";
+}
+
+<h2>Entrar em Contato</h2>
+
+<form asp-action="Create" method="post">
+    
+    <input type="hidden" asp-for="EstudanteId" />
+
+    <div class="form-group">
+        <label asp-for="Mensagem" class="control-label"></label>
+        <textarea asp-for="Mensagem" class="form-control"></textarea>
+        <span asp-validation-for="Mensagem" class="text-danger"></span>
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-success">Enviar</button>
+
+    <a asp-controller="Estudantes"
+           asp-action="Details"
+           asp-route-id="@Model.EstudanteId"
+           class="btn btn-secondary">
+        Voltar
+    </a>
+
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

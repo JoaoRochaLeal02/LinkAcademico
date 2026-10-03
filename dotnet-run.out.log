@@ -1,0 +1,233 @@
+Usando as configurações de inicialização de C:\CSHARP\LinkAcademico\Properties\launchSettings.json...
+Compilando...
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (34ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+      FROM [AspNetRoles] AS [a]
+      WHERE [a].[NormalizedName] = @__normalizedName_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+      FROM [AspNetRoles] AS [a]
+      WHERE [a].[NormalizedName] = @__normalizedName_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 256)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [a].[Id], [a].[ConcurrencyStamp], [a].[Name], [a].[NormalizedName]
+      FROM [AspNetRoles] AS [a]
+      WHERE [a].[NormalizedName] = @__normalizedName_0
+warn: Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServer[8]
+      The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: https://localhost:7202
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://localhost:5148
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Development
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: C:\CSHARP\LinkAcademico
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (7ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+      FROM [Empresas] AS [e]
+      LEFT JOIN [Vagas] AS [v] ON [e].[Id] = [v].[EmpresaId]
+      ORDER BY [e].[Nome], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+      FROM [Empresas] AS [e]
+      LEFT JOIN [Vagas] AS [v] ON [e].[Id] = [v].[EmpresaId]
+      ORDER BY [e].[Nome], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (23ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [e1].[Id], [e1].[Categoria], [e1].[CertificadoUrl], [e1].[Competencias], [e1].[Data], [e1].[Descricao], [e1].[EstudanteId], [e1].[ImagemUrl], [e1].[Instituicao], [e1].[ProjetoUrl], [e1].[TipoAtividade], [e1].[Titulo], [e0].[Id], [e0].[Bio], [e0].[Cidade], [e0].[Curso], [e0].[Email], [e0].[FotoPerfil], [e0].[GitHub], [e0].[Habilidades], [e0].[LinkedIn], [e0].[Nome], [e0].[Periodo], [e0].[Portfolio], [e0].[Telefone], [e0].[UserId]
+      FROM (
+          SELECT TOP(@__p_0) [e].[Id], [e].[Categoria], [e].[CertificadoUrl], [e].[Competencias], [e].[Data], [e].[Descricao], [e].[EstudanteId], [e].[ImagemUrl], [e].[Instituicao], [e].[ProjetoUrl], [e].[TipoAtividade], [e].[Titulo]
+          FROM [Experiencias] AS [e]
+          ORDER BY [e].[Id] DESC
+      ) AS [e1]
+      INNER JOIN [Estudantes] AS [e0] ON [e1].[EstudanteId] = [e0].[Id]
+      ORDER BY [e1].[Id] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (5ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM [Experiencias] AS [e]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (10ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(@__p_0) [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId]
+      FROM [Empresas] AS [e]
+      ORDER BY [e].[Id] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (12ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [v0].[Id], [v0].[Ativa], [v0].[DataLimite], [v0].[DataPublicacao], [v0].[Descricao], [v0].[EmpresaId], [v0].[Local], [v0].[ModeloTrabalho], [v0].[Remuneracao], [v0].[Requisitos], [v0].[TipoVaga], [v0].[Titulo], [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [c].[Id], [c].[DataCandidatura], [c].[EstudanteId], [c].[Mensagem], [c].[VagaId]
+      FROM (
+          SELECT TOP(@__p_0) [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+          FROM [Vagas] AS [v]
+          WHERE [v].[Ativa] = CAST(1 AS bit)
+          ORDER BY [v].[DataPublicacao] DESC
+      ) AS [v0]
+      INNER JOIN [Empresas] AS [e] ON [v0].[EmpresaId] = [e].[Id]
+      LEFT JOIN [CandidaturasVagas] AS [c] ON [v0].[Id] = [c].[VagaId]
+      ORDER BY [v0].[DataPublicacao] DESC, [v0].[Id], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (8ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [e].[Id]
+      FROM [Empresas] AS [e]
+      WHERE [e].[UserId] = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (10ms) [Parameters=[@__p_1='?' (DbType = Int32), @__empresaLogadaId_Value_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [v0].[Id], [v0].[Ativa], [v0].[DataLimite], [v0].[DataPublicacao], [v0].[Descricao], [v0].[EmpresaId], [v0].[Local], [v0].[ModeloTrabalho], [v0].[Remuneracao], [v0].[Requisitos], [v0].[TipoVaga], [v0].[Titulo], [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [c].[Id], [c].[DataCandidatura], [c].[EstudanteId], [c].[Mensagem], [c].[VagaId]
+      FROM (
+          SELECT TOP(@__p_1) [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+          FROM [Vagas] AS [v]
+          WHERE [v].[Ativa] = CAST(1 AS bit) AND [v].[EmpresaId] <> @__empresaLogadaId_Value_0
+          ORDER BY [v].[DataPublicacao] DESC
+      ) AS [v0]
+      INNER JOIN [Empresas] AS [e] ON [v0].[EmpresaId] = [e].[Id]
+      LEFT JOIN [CandidaturasVagas] AS [c] ON [v0].[Id] = [c].[VagaId]
+      ORDER BY [v0].[DataPublicacao] DESC, [v0].[Id], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [e].[FotoPerfil]
+      FROM [Empresas] AS [e]
+      WHERE [e].[UserId] = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+      FROM [Empresas] AS [e]
+      LEFT JOIN [Vagas] AS [v] ON [e].[Id] = [v].[EmpresaId]
+      ORDER BY [e].[Nome], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [e].[FotoPerfil]
+      FROM [Empresas] AS [e]
+      WHERE [e].[UserId] = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [e1].[Id], [e1].[Categoria], [e1].[CertificadoUrl], [e1].[Competencias], [e1].[Data], [e1].[Descricao], [e1].[EstudanteId], [e1].[ImagemUrl], [e1].[Instituicao], [e1].[ProjetoUrl], [e1].[TipoAtividade], [e1].[Titulo], [e0].[Id], [e0].[Bio], [e0].[Cidade], [e0].[Curso], [e0].[Email], [e0].[FotoPerfil], [e0].[GitHub], [e0].[Habilidades], [e0].[LinkedIn], [e0].[Nome], [e0].[Periodo], [e0].[Portfolio], [e0].[Telefone], [e0].[UserId]
+      FROM (
+          SELECT TOP(@__p_0) [e].[Id], [e].[Categoria], [e].[CertificadoUrl], [e].[Competencias], [e].[Data], [e].[Descricao], [e].[EstudanteId], [e].[ImagemUrl], [e].[Instituicao], [e].[ProjetoUrl], [e].[TipoAtividade], [e].[Titulo]
+          FROM [Experiencias] AS [e]
+          ORDER BY [e].[Id] DESC
+      ) AS [e1]
+      INNER JOIN [Estudantes] AS [e0] ON [e1].[EstudanteId] = [e0].[Id]
+      ORDER BY [e1].[Id] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM [Experiencias] AS [e]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(@__p_0) [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId]
+      FROM [Empresas] AS [e]
+      ORDER BY [e].[Id] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [v0].[Id], [v0].[Ativa], [v0].[DataLimite], [v0].[DataPublicacao], [v0].[Descricao], [v0].[EmpresaId], [v0].[Local], [v0].[ModeloTrabalho], [v0].[Remuneracao], [v0].[Requisitos], [v0].[TipoVaga], [v0].[Titulo], [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [c].[Id], [c].[DataCandidatura], [c].[EstudanteId], [c].[Mensagem], [c].[VagaId]
+      FROM (
+          SELECT TOP(@__p_0) [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+          FROM [Vagas] AS [v]
+          WHERE [v].[Ativa] = CAST(1 AS bit)
+          ORDER BY [v].[DataPublicacao] DESC
+      ) AS [v0]
+      INNER JOIN [Empresas] AS [e] ON [v0].[EmpresaId] = [e].[Id]
+      LEFT JOIN [CandidaturasVagas] AS [c] ON [v0].[Id] = [c].[VagaId]
+      ORDER BY [v0].[DataPublicacao] DESC, [v0].[Id], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [e].[Id]
+      FROM [Empresas] AS [e]
+      WHERE [e].[UserId] = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__empresaLogadaId_Value_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [v0].[Id], [v0].[Ativa], [v0].[DataLimite], [v0].[DataPublicacao], [v0].[Descricao], [v0].[EmpresaId], [v0].[Local], [v0].[ModeloTrabalho], [v0].[Remuneracao], [v0].[Requisitos], [v0].[TipoVaga], [v0].[Titulo], [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [c].[Id], [c].[DataCandidatura], [c].[EstudanteId], [c].[Mensagem], [c].[VagaId]
+      FROM (
+          SELECT TOP(@__p_1) [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+          FROM [Vagas] AS [v]
+          WHERE [v].[Ativa] = CAST(1 AS bit) AND [v].[EmpresaId] <> @__empresaLogadaId_Value_0
+          ORDER BY [v].[DataPublicacao] DESC
+      ) AS [v0]
+      INNER JOIN [Empresas] AS [e] ON [v0].[EmpresaId] = [e].[Id]
+      LEFT JOIN [CandidaturasVagas] AS [c] ON [v0].[Id] = [c].[VagaId]
+      ORDER BY [v0].[DataPublicacao] DESC, [v0].[Id], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [e].[FotoPerfil]
+      FROM [Empresas] AS [e]
+      WHERE [e].[UserId] = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+      FROM [Empresas] AS [e]
+      LEFT JOIN [Vagas] AS [v] ON [e].[Id] = [v].[EmpresaId]
+      ORDER BY [e].[Nome], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [e].[FotoPerfil]
+      FROM [Empresas] AS [e]
+      WHERE [e].[UserId] = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [e1].[Id], [e1].[Categoria], [e1].[CertificadoUrl], [e1].[Competencias], [e1].[Data], [e1].[Descricao], [e1].[EstudanteId], [e1].[ImagemUrl], [e1].[Instituicao], [e1].[ProjetoUrl], [e1].[TipoAtividade], [e1].[Titulo], [e0].[Id], [e0].[Bio], [e0].[Cidade], [e0].[Curso], [e0].[Email], [e0].[FotoPerfil], [e0].[GitHub], [e0].[Habilidades], [e0].[LinkedIn], [e0].[Nome], [e0].[Periodo], [e0].[Portfolio], [e0].[Telefone], [e0].[UserId]
+      FROM (
+          SELECT TOP(@__p_0) [e].[Id], [e].[Categoria], [e].[CertificadoUrl], [e].[Competencias], [e].[Data], [e].[Descricao], [e].[EstudanteId], [e].[ImagemUrl], [e].[Instituicao], [e].[ProjetoUrl], [e].[TipoAtividade], [e].[Titulo]
+          FROM [Experiencias] AS [e]
+          ORDER BY [e].[Id] DESC
+      ) AS [e1]
+      INNER JOIN [Estudantes] AS [e0] ON [e1].[EstudanteId] = [e0].[Id]
+      ORDER BY [e1].[Id] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM [Experiencias] AS [e]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(@__p_0) [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId]
+      FROM [Empresas] AS [e]
+      ORDER BY [e].[Id] DESC
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [v0].[Id], [v0].[Ativa], [v0].[DataLimite], [v0].[DataPublicacao], [v0].[Descricao], [v0].[EmpresaId], [v0].[Local], [v0].[ModeloTrabalho], [v0].[Remuneracao], [v0].[Requisitos], [v0].[TipoVaga], [v0].[Titulo], [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [c].[Id], [c].[DataCandidatura], [c].[EstudanteId], [c].[Mensagem], [c].[VagaId]
+      FROM (
+          SELECT TOP(@__p_0) [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+          FROM [Vagas] AS [v]
+          WHERE [v].[Ativa] = CAST(1 AS bit)
+          ORDER BY [v].[DataPublicacao] DESC
+      ) AS [v0]
+      INNER JOIN [Empresas] AS [e] ON [v0].[EmpresaId] = [e].[Id]
+      LEFT JOIN [CandidaturasVagas] AS [c] ON [v0].[Id] = [c].[VagaId]
+      ORDER BY [v0].[DataPublicacao] DESC, [v0].[Id], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [e].[Id]
+      FROM [Empresas] AS [e]
+      WHERE [e].[UserId] = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__p_1='?' (DbType = Int32), @__empresaLogadaId_Value_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT [v0].[Id], [v0].[Ativa], [v0].[DataLimite], [v0].[DataPublicacao], [v0].[Descricao], [v0].[EmpresaId], [v0].[Local], [v0].[ModeloTrabalho], [v0].[Remuneracao], [v0].[Requisitos], [v0].[TipoVaga], [v0].[Titulo], [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [c].[Id], [c].[DataCandidatura], [c].[EstudanteId], [c].[Mensagem], [c].[VagaId]
+      FROM (
+          SELECT TOP(@__p_1) [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+          FROM [Vagas] AS [v]
+          WHERE [v].[Ativa] = CAST(1 AS bit) AND [v].[EmpresaId] <> @__empresaLogadaId_Value_0
+          ORDER BY [v].[DataPublicacao] DESC
+      ) AS [v0]
+      INNER JOIN [Empresas] AS [e] ON [v0].[EmpresaId] = [e].[Id]
+      LEFT JOIN [CandidaturasVagas] AS [c] ON [v0].[Id] = [c].[VagaId]
+      ORDER BY [v0].[DataPublicacao] DESC, [v0].[Id], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [e].[FotoPerfil]
+      FROM [Empresas] AS [e]
+      WHERE [e].[UserId] = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT [e].[Id], [e].[AreaAtuacao], [e].[Descricao], [e].[EhEgressoEmpreendedor], [e].[Email], [e].[FotoPerfil], [e].[Nome], [e].[OQueBusca], [e].[Tecnologias], [e].[UserId], [v].[Id], [v].[Ativa], [v].[DataLimite], [v].[DataPublicacao], [v].[Descricao], [v].[EmpresaId], [v].[Local], [v].[ModeloTrabalho], [v].[Remuneracao], [v].[Requisitos], [v].[TipoVaga], [v].[Titulo]
+      FROM [Empresas] AS [e]
+      LEFT JOIN [Vagas] AS [v] ON [e].[Id] = [v].[EmpresaId]
+      ORDER BY [e].[Nome], [e].[Id]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__userId_0='?' (Size = 450)], CommandType='Text', CommandTimeout='30']
+      SELECT TOP(1) [e].[FotoPerfil]
+      FROM [Empresas] AS [e]
+      WHERE [e].[UserId] = @__userId_0

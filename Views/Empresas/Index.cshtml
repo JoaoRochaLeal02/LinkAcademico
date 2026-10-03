@@ -1,0 +1,547 @@
+@model IEnumerable<LinkAcademico.Models.Empresa>
+
+@{
+    ViewData["Title"] = "Empresas";
+
+    var empresas = Model?.ToList() ?? new List<LinkAcademico.Models.Empresa>();
+    var totalEmpresas = empresas.Count;
+    var empresasComLogo = empresas.Count(e => !string.IsNullOrWhiteSpace(e.FotoPerfil));
+    var empresasEgressas = empresas.Count(e => e.EhEgressoEmpreendedor);
+    var vagasAtivas = empresas.Sum(e => e.Vagas?.Count(v => v.Ativa) ?? 0);
+}
+
+@functions {
+    private static string TextoOuPadrao(string? valor, string padrao)
+    {
+        return string.IsNullOrWhiteSpace(valor) ? padrao : valor;
+    }
+
+    private static string Resumo(string? texto, int limite = 145)
+    {
+        if (string.IsNullOrWhiteSpace(texto))
+        {
+            return "Empresa parceira conectada ao ecossistema academico, aberta a aproximar talentos, projetos e oportunidades.";
+        }
+
+        var textoLimpo = texto.Trim();
+
+        if (textoLimpo.Length <= limite)
+        {
+            return textoLimpo;
+        }
+
+        return textoLimpo.Substring(0, limite).TrimEnd() + "...";
+    }
+
+    private static IEnumerable<string> Tags(string? texto)
+    {
+        if (string.IsNullOrWhiteSpace(texto))
+        {
+            return Enumerable.Empty<string>();
+        }
+
+        return texto
+            .Split(new[] { ',', ';', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
+            .Select(t => t.Trim())
+            .Where(t => !string.IsNullOrWhiteSpace(t))
+            .Take(4);
+    }
+}
+
+<style>
+    body {
+        background: #f4f7fb;
+    }
+
+    .companies-page {
+        color: #17212f;
+    }
+
+    .companies-hero {
+        background: #0f426d;
+        border-radius: 8px;
+        color: #fff;
+        display: grid;
+        gap: 22px;
+        grid-template-columns: minmax(0, 1.5fr) minmax(260px, .8fr);
+        margin-bottom: 22px;
+        overflow: hidden;
+        padding: 30px;
+        position: relative;
+    }
+
+    .companies-hero::after {
+        background: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,0));
+        content: "";
+        height: 210px;
+        position: absolute;
+        right: -70px;
+        top: -90px;
+        transform: rotate(12deg);
+        width: 320px;
+    }
+
+    .companies-eyebrow {
+        align-items: center;
+        color: #cfe6fa;
+        display: inline-flex;
+        font-size: .78rem;
+        font-weight: 800;
+        gap: 8px;
+        letter-spacing: 0;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+
+    .companies-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 900;
+        letter-spacing: 0;
+        line-height: 1.05;
+        margin: 0 0 12px;
+        max-width: 780px;
+    }
+
+    .companies-subtitle {
+        color: #eaf4fc;
+        font-size: 1rem;
+        line-height: 1.65;
+        margin: 0;
+        max-width: 760px;
+    }
+
+    .companies-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .companies-actions .btn {
+        align-items: center;
+        border-radius: 8px;
+        display: inline-flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .companies-stats {
+        align-self: stretch;
+        background: rgba(255,255,255,.12);
+        border: 1px solid rgba(255,255,255,.2);
+        border-radius: 8px;
+        display: grid;
+        gap: 10px;
+        padding: 16px;
+        z-index: 1;
+    }
+
+    .company-stat {
+        background: rgba(255,255,255,.12);
+        border-radius: 8px;
+        padding: 14px;
+    }
+
+    .company-stat strong {
+        display: block;
+        font-size: 1.65rem;
+        line-height: 1;
+    }
+
+    .company-stat span {
+        color: #d7e8f7;
+        display: block;
+        font-size: .84rem;
+        margin-top: 5px;
+    }
+
+    .companies-toolbar {
+        align-items: center;
+        display: flex;
+        gap: 14px;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    .companies-toolbar h2 {
+        font-size: 1.25rem;
+        font-weight: 900;
+        margin: 0;
+    }
+
+    .companies-toolbar p {
+        color: #5e6c7d;
+        margin: 4px 0 0;
+    }
+
+    .companies-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    }
+
+    .company-card {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 8px;
+        box-shadow: 0 14px 34px rgba(23, 33, 47, .07);
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+        overflow: hidden;
+    }
+
+    .company-cover {
+        background: linear-gradient(135deg, #123f63, #1769aa);
+        min-height: 86px;
+        position: relative;
+    }
+
+    .company-logo {
+        align-items: center;
+        background: #fff;
+        border: 4px solid #fff;
+        border-radius: 8px;
+        bottom: -34px;
+        box-shadow: 0 12px 24px rgba(23, 33, 47, .16);
+        color: #0f426d;
+        display: flex;
+        font-size: 2rem;
+        height: 78px;
+        justify-content: center;
+        left: 18px;
+        overflow: hidden;
+        position: absolute;
+        width: 78px;
+    }
+
+    .company-logo img {
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .company-card-body {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        padding: 46px 18px 18px;
+    }
+
+    .company-header {
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+    }
+
+    .company-name {
+        color: #17212f;
+        font-size: 1.2rem;
+        font-weight: 900;
+        line-height: 1.2;
+        margin: 0;
+    }
+
+    .company-area {
+        align-items: center;
+        color: #1769aa;
+        display: inline-flex;
+        font-size: .88rem;
+        font-weight: 800;
+        gap: 6px;
+        margin-top: 8px;
+    }
+
+    .company-badge {
+        align-items: center;
+        background: #e8f6f0;
+        border-radius: 999px;
+        color: #116450;
+        display: inline-flex;
+        flex: 0 0 auto;
+        font-size: .78rem;
+        font-weight: 800;
+        gap: 5px;
+        height: fit-content;
+        padding: 7px 10px;
+    }
+
+    .company-description {
+        color: #526070;
+        line-height: 1.58;
+        margin: 16px 0 14px;
+    }
+
+    .company-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+    }
+
+    .company-tag {
+        background: #eef4fb;
+        border: 1px solid #d9e8f5;
+        border-radius: 999px;
+        color: #0f426d;
+        font-size: .78rem;
+        font-weight: 800;
+        padding: 6px 10px;
+    }
+
+    .company-info {
+        border-top: 1px solid #e6edf5;
+        display: grid;
+        gap: 8px;
+        margin-top: auto;
+        padding-top: 14px;
+    }
+
+    .company-info-item {
+        align-items: center;
+        color: #526070;
+        display: flex;
+        font-size: .9rem;
+        gap: 8px;
+        min-width: 0;
+    }
+
+    .company-info-item span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .company-footer {
+        display: flex;
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .company-footer .btn {
+        align-items: center;
+        border-radius: 8px;
+        display: inline-flex;
+        flex: 1;
+        gap: 8px;
+        justify-content: center;
+        min-width: 0;
+    }
+
+    .companies-empty {
+        background: #fff;
+        border: 1px dashed #b9c7d6;
+        border-radius: 8px;
+        color: #526070;
+        padding: 28px;
+        text-align: center;
+    }
+
+    .companies-empty i {
+        color: #1769aa;
+        display: block;
+        font-size: 2.2rem;
+        margin-bottom: 10px;
+    }
+
+    @@media (max-width: 992px) {
+        .companies-hero {
+            grid-template-columns: 1fr;
+        }
+
+        .companies-stats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .companies-hero {
+            padding: 24px 18px;
+        }
+
+        .companies-stats,
+        .companies-toolbar {
+            grid-template-columns: 1fr;
+        }
+
+        .companies-toolbar {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .company-header,
+        .company-footer {
+            flex-direction: column;
+        }
+
+        .company-footer .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="companies-page">
+    <section class="companies-hero">
+        <div>
+            <div class="companies-eyebrow">
+                <i class="bi bi-buildings-fill"></i>
+                Rede academica
+            </div>
+
+            <h1 class="companies-title">
+                Empresas parceiras
+            </h1>
+
+            <p class="companies-subtitle">
+                Conheca empresas, egressos empreendedores e oportunidades conectadas aos estudantes da plataforma.
+            </p>
+
+            <div class="companies-actions">
+                <a asp-controller="Vagas"
+                   asp-action="Index"
+                   class="btn btn-light">
+                    <i class="bi bi-briefcase-fill"></i>
+                    Ver vagas
+                </a>
+
+                @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Empresa"))
+                {
+                    <a asp-action="Perfil"
+                       class="btn btn-outline-light">
+                        <i class="bi bi-pencil-square"></i>
+                        Meu perfil
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="companies-stats" aria-label="Resumo das empresas">
+            <div class="company-stat">
+                <strong>@totalEmpresas</strong>
+                <span>empresas cadastradas</span>
+            </div>
+
+            <div class="company-stat">
+                <strong>@empresasComLogo</strong>
+                <span>com logo ou foto</span>
+            </div>
+
+            <div class="company-stat">
+                <strong>@empresasEgressas</strong>
+                <span>egressos empreendedores</span>
+            </div>
+
+            <div class="company-stat">
+                <strong>@vagasAtivas</strong>
+                <span>vagas ativas</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="companies-toolbar">
+        <div>
+            <h2>Catalogo de parceiros</h2>
+            <p>Perfis com area de atuacao, tecnologias, contato e vagas abertas.</p>
+        </div>
+    </div>
+
+    @if (!empresas.Any())
+    {
+        <div class="companies-empty">
+            <i class="bi bi-building-add"></i>
+            <strong>Nenhuma empresa cadastrada ainda.</strong>
+            <p class="mb-0 mt-2">
+                Quando uma empresa completar o perfil, ela aparecera aqui com logo, descricao e dados de contato.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="companies-grid">
+            @foreach (var empresa in empresas)
+            {
+                var tags = Tags(empresa.Tecnologias).ToList();
+                var vagasEmpresaAtivas = empresa.Vagas?.Count(v => v.Ativa) ?? 0;
+
+                <article class="company-card">
+                    <div class="company-cover">
+                        <div class="company-logo">
+                            @if (!string.IsNullOrWhiteSpace(empresa.FotoPerfil))
+                            {
+                                <img src="@Url.Content(empresa.FotoPerfil)"
+                                     alt="Logo da empresa @empresa.Nome" />
+                            }
+                            else
+                            {
+                                <i class="bi bi-building"></i>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="company-card-body">
+                        <div class="company-header">
+                            <div>
+                                <h3 class="company-name">
+                                    @TextoOuPadrao(empresa.Nome, "Empresa parceira")
+                                </h3>
+
+                                <div class="company-area">
+                                    <i class="bi bi-diagram-3-fill"></i>
+                                    @TextoOuPadrao(empresa.AreaAtuacao, "Area nao informada")
+                                </div>
+                            </div>
+
+                            @if (empresa.EhEgressoEmpreendedor)
+                            {
+                                <span class="company-badge">
+                                    <i class="bi bi-mortarboard-fill"></i>
+                                    Egresso
+                                </span>
+                            }
+                        </div>
+
+                        <p class="company-description">
+                            @Resumo(empresa.Descricao)
+                        </p>
+
+                        @if (tags.Any())
+                        {
+                            <div class="company-tags" aria-label="Tecnologias">
+                                @foreach (var tag in tags)
+                                {
+                                    <span class="company-tag">@tag</span>
+                                }
+                            </div>
+                        }
+
+                        <div class="company-info">
+                            <div class="company-info-item">
+                                <i class="bi bi-envelope-fill"></i>
+                                <span>@TextoOuPadrao(empresa.Email, "E-mail nao informado")</span>
+                            </div>
+
+                            <div class="company-info-item">
+                                <i class="bi bi-bullseye"></i>
+                                <span>@TextoOuPadrao(empresa.OQueBusca, "Interesses ainda nao informados")</span>
+                            </div>
+
+                            <div class="company-info-item">
+                                <i class="bi bi-briefcase-fill"></i>
+                                <span>@vagasEmpresaAtivas vaga@(vagasEmpresaAtivas == 1 ? "" : "s") ativa@(vagasEmpresaAtivas == 1 ? "" : "s")</span>
+                            </div>
+                        </div>
+
+                        <div class="company-footer">
+                            <a asp-action="Details"
+                               asp-route-id="@empresa.Id"
+                               class="btn btn-primary">
+                                <i class="bi bi-eye-fill"></i>
+                                Ver perfil
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</div>

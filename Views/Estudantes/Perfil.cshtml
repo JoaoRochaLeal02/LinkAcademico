@@ -1,0 +1,460 @@
+﻿@model LinkAcademico.ModelosDeView.PerfilEstudanteViewModel
+
+@{
+    ViewData["Title"] = "Perfil";
+}
+
+<style>
+
+    body {
+        background: #f4f7fb;
+    }
+
+    .profile-card {
+        border-radius: 28px;
+        overflow: hidden;
+        border: none;
+    }
+
+    .profile-cover {
+        height: 130px;
+        background: linear-gradient(135deg, #0a66c2, #004182);
+    }
+
+    .profile-photo {
+        width: 135px;
+        height: 135px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 5px solid white;
+        margin-top: -68px;
+        box-shadow: 0 10px 25px rgba(0,0,0,.15);
+    }
+
+    .profile-name {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #1d1d1d;
+    }
+
+    .profile-course {
+        color: #666;
+        font-size: 1.05rem;
+    }
+
+    .profile-bio {
+        color: #555;
+        line-height: 1.8;
+        margin-top: 18px;
+    }
+
+    .profile-info {
+        margin-top: 25px;
+    }
+
+    .profile-info-item {
+        margin-bottom: 14px;
+        color: #444;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .profile-info-item i {
+            color: #0a66c2;
+        }
+
+    .profile-button {
+        border-radius: 30px;
+        padding: 12px 18px;
+        font-weight: 700;
+    }
+
+    .experience-card {
+        border-radius: 24px;
+        border: 1px solid #ececec;
+        overflow: hidden;
+        transition: .2s;
+    }
+
+        .experience-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,.08);
+        }
+
+    .experience-image {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .experience-placeholder {
+        width: 100%;
+        height: 220px;
+        background: linear-gradient(135deg, #0a66c2, #004182);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 4rem;
+    }
+
+    .skill-badge {
+        display: inline-block;
+        background: #eef4fb;
+        color: #0a66c2;
+        padding: 8px 14px;
+        border-radius: 20px;
+        font-size: .85rem;
+        font-weight: 700;
+        margin-right: 8px;
+        margin-bottom: 8px;
+    }
+
+</style>
+
+<div class="container py-5">
+
+    <div class="row">
+
+        <!-- PERFIL -->
+
+        <div class="col-lg-4 mb-4">
+
+            <div class="card profile-card shadow-sm">
+
+                <!-- CAPA -->
+
+                <div class="profile-cover"></div>
+
+                <!-- CONTEÚDO -->
+
+                <div class="text-center px-4 pb-4">
+
+                    <!-- FOTO -->
+
+                    <img src="@(string.IsNullOrEmpty(Model.Estudante.FotoPerfil)
+                                                                     ? "https://via.placeholder.com/300"
+                                                                     : Model.Estudante.FotoPerfil)"
+                         class="profile-photo" />
+
+                    <!-- NOME -->
+
+                    <div class="profile-name mt-3">
+
+                        @Model.Estudante.Nome
+
+                    </div>
+
+                    <!-- CURSO -->
+
+                    <div class="profile-course mt-2">
+
+                        @Model.Estudante.Curso
+
+                    </div>
+
+                    <!-- BIO -->
+                    @if (!string.IsNullOrEmpty(Model.Estudante.Bio))
+                    {
+                        <div class="profile-bio">
+
+                            @Model.Estudante.Bio
+
+                        </div>
+                    }
+
+                    <!-- INFORMAÇÕES -->
+
+                    <div class="profile-info text-start">
+
+                        @if (!string.IsNullOrEmpty(Model.Estudante.Cidade))
+                        {
+                            <div class="profile-info-item">
+
+                                <i class="bi bi-geo-alt-fill"></i>
+
+                                @Model.Estudante.Cidade
+
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Estudante.Periodo))
+                        {
+                            <div class="profile-info-item">
+
+                                <i class="bi bi-mortarboard-fill"></i>
+
+                                @Model.Estudante.Periodo
+
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Estudante.Email))
+                        {
+                            <div class="profile-info-item">
+
+                                <i class="bi bi-envelope-fill"></i>
+
+                                @Model.Estudante.Email
+
+                            </div>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Estudante.Telefone))
+                        {
+                            <div class="profile-info-item">
+
+                                <i class="bi bi-telephone-fill"></i>
+
+                                @Model.Estudante.Telefone
+
+                            </div>
+                        }
+
+                    </div>
+
+                    <!-- BOTÕES -->
+
+                    <div class="d-grid gap-2 mt-4">
+
+                        @if (!string.IsNullOrEmpty(Model.Estudante.Telefone))
+                        {
+                            <a href="https://wa.me/55@(Model.Estudante.Telefone
+                                                                                               .Replace(" ", "")
+                                                                                               .Replace("-", "")
+                                                                                               .Replace("(", "")
+                                                                                               .Replace(")", ""))"
+                                   target="_blank"
+                                   class="btn btn-success profile-button">
+
+                                <i class="bi bi-whatsapp me-2"></i>
+
+                                Conversar no WhatsApp
+
+                            </a>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Estudante.Email))
+                        {
+                            <a href="mailto:@Model.Estudante.Email"
+                                   class="btn btn-outline-dark profile-button">
+
+                                <i class="bi bi-envelope-fill me-2"></i>
+
+                                Enviar E-mail
+
+                            </a>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Estudante.LinkedIn))
+                        {
+                            <a href="@Model.Estudante.LinkedIn"
+                                   target="_blank"
+                                   class="btn btn-primary profile-button">
+
+                                <i class="bi bi-linkedin me-2"></i>
+
+                                LinkedIn
+
+                            </a>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Estudante.GitHub))
+                        {
+                            <a href="@Model.Estudante.GitHub"
+                                   target="_blank"
+                                   class="btn btn-dark profile-button">
+
+                                <i class="bi bi-github me-2"></i>
+
+                                GitHub
+
+                            </a>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Estudante.Portfolio))
+                        {
+                            <a href="@Model.Estudante.Portfolio"
+                                   target="_blank"
+                                   class="btn btn-outline-primary profile-button">
+
+                                <i class="bi bi-globe me-2"></i>
+
+                                Portfólio
+
+                            </a>
+                        }
+
+                        @if (User.Identity != null &&
+                                                     User.Identity.IsAuthenticated &&
+                                                     User.IsInRole("Estudante") &&
+                                                     User.Identity.Name == Model.Estudante.Email)
+                        {
+                            <a asp-action="Edit"
+                                   asp-route-id="@Model.Estudante.Id"
+                                   class="btn btn-outline-secondary profile-button">
+
+                                <i class="bi bi-pencil-square me-2"></i>
+
+                                Editar Perfil
+
+                            </a>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- EXPERIÊNCIAS -->
+
+        <div class="col-lg-8">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h2 class="fw-bold mb-0">
+
+                    Experiências
+
+                </h2>
+
+                <span class="badge bg-primary rounded-pill px-4 py-2">
+
+                    @Model.Experiencias.Count experiência(s)
+
+                </span>
+
+            </div>
+
+            @if (!Model.Experiencias.Any())
+            {
+                <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
+
+                    <i class="bi bi-journal-richtext"
+                       style="font-size: 4rem; color: #0a66c2;"></i>
+
+                    <h3 class="fw-bold mt-4">
+
+                        Nenhuma experiência publicada
+
+                    </h3>
+
+                </div>
+            }
+            else
+            {
+                @foreach (var exp in Model.Experiencias)
+                {
+                    <div class="card experience-card shadow-sm mb-4">
+
+                        <!-- IMAGEM -->
+                        @if (!string.IsNullOrEmpty(exp.ImagemUrl))
+                        {
+                            <img src="@exp.ImagemUrl"
+                                 class="experience-image"
+                                 onerror="this.src='https://via.placeholder.com/1200x400?text=Projeto'" />
+                        }
+                        else
+                        {
+                            <div class="experience-placeholder">
+
+                                <i class="bi bi-image"></i>
+
+                            </div>
+                        }
+
+                        <!-- CONTEÚDO -->
+
+                        <div class="p-4">
+
+                            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+
+                                <div>
+
+                                    <h3 class="fw-bold">
+
+                                        @exp.Titulo
+
+                                    </h3>
+
+                                    <div class="text-muted">
+
+                                        @exp.Categoria - @Html.DisplayFor(modelItem => exp.TipoAtividade)
+
+                                    </div>
+
+                                </div>
+
+                                <div class="text-muted">
+
+                                    @exp.Data.ToString("dd/MM/yyyy")
+
+                                </div>
+
+                            </div>
+
+                            <p class="text-muted mt-3"
+                                   style="line-height: 1.8;">
+
+                                @exp.Descricao
+
+                            </p>
+
+                            <!-- SKILLS -->
+                            @if (!string.IsNullOrEmpty(exp.Competencias))
+                            {
+                                <div class="mt-3">
+
+                                    @foreach (var skill in exp.Competencias.Split(','))
+                                    {
+                                        <span class="skill-badge">
+
+                                            @skill.Trim()
+
+                                        </span>
+                                    }
+
+                                </div>
+                            }
+
+                            <!-- BOTÕES -->
+
+                            <div class="mt-4 d-flex gap-2 flex-wrap">
+
+                                <a asp-controller="Experiencias"
+                                       asp-action="Details"
+                                       asp-route-id="@exp.Id"
+                                       class="btn btn-outline-primary rounded-pill px-4">
+
+                                    Ver detalhes
+
+                                </a>
+
+                                @if (!string.IsNullOrEmpty(exp.ProjetoUrl))
+                                {
+                                    <a href="@exp.ProjetoUrl"
+                                           target="_blank"
+                                           class="btn btn-primary rounded-pill px-4">
+
+                                        Projeto
+
+                                    </a>
+                                }
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+            }
+
+        </div>
+
+    </div>
+
+</div>

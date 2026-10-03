@@ -1,0 +1,470 @@
+﻿@model LinkAcademico.Models.Empresa
+
+@{
+    ViewData["Title"] = "Completar Perfil da Empresa";
+}
+
+<style>
+    .company-onboarding {
+        display: grid;
+        grid-template-columns: minmax(280px, .72fr) minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+    }
+
+    .company-intro {
+        background: linear-gradient(150deg, rgba(15,66,109,.96), rgba(21,131,109,.86)), url('https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=1200&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        border: 1px solid rgba(255,255,255,.28);
+        border-radius: 8px;
+        color: #fff;
+        padding: 30px;
+        min-height: 520px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0 16px 36px rgba(23,33,47,.10);
+        position: sticky;
+        top: 96px;
+    }
+
+    .company-intro-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        width: fit-content;
+        border: 1px solid rgba(255,255,255,.24);
+        background: rgba(255,255,255,.12);
+        border-radius: 8px;
+        padding: 9px 13px;
+        font-weight: 800;
+        backdrop-filter: blur(12px);
+    }
+
+    .company-intro h1 {
+        font-size: clamp(2rem, 3vw, 3rem);
+        font-weight: 900;
+        line-height: 1.08;
+        margin: 22px 0 14px;
+        text-wrap: balance;
+    }
+
+    .company-intro p {
+        color: rgba(255,255,255,.86);
+        line-height: 1.7;
+        margin-bottom: 0;
+    }
+
+    .company-steps {
+        display: grid;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .company-step {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: rgba(255,255,255,.9);
+    }
+
+        .company-step i {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: rgba(255,255,255,.14);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex: 0 0 auto;
+        }
+
+    .company-form-card {
+        background: #fff;
+        border: 1px solid #d8e0ea;
+        border-radius: 8px;
+        box-shadow: 0 16px 36px rgba(23,33,47,.08);
+        padding: 30px;
+    }
+
+    .company-form-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 26px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid #edf1f5;
+    }
+
+    .company-form-title {
+        color: #17212f;
+        font-size: 1.65rem;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
+
+    .company-form-subtitle {
+        color: #667085;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    .company-logo-picker {
+        display: grid;
+        grid-template-columns: 86px minmax(0, 1fr);
+        gap: 16px;
+        align-items: center;
+        background: #f7fafc;
+        border: 1px solid #d8e0ea;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 22px;
+    }
+
+    .company-logo-preview {
+        width: 86px;
+        height: 86px;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #1769aa, #15836d);
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow: 0 10px 24px rgba(23,33,47,.12);
+    }
+
+        .company-logo-preview i {
+            font-size: 2rem;
+        }
+
+        .company-logo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+    .company-logo-copy strong {
+        display: block;
+        color: #17212f;
+        margin-bottom: 6px;
+    }
+
+    .company-logo-copy span {
+        color: #667085;
+        display: block;
+        font-size: .92rem;
+        margin-bottom: 12px;
+    }
+
+    .form-label {
+        color: #17212f;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border-color: #d8e0ea;
+        border-radius: 8px;
+        min-height: 46px;
+    }
+
+    textarea.form-control {
+        min-height: 118px;
+        resize: vertical;
+    }
+
+    .form-control:focus {
+        border-color: #1769aa;
+        box-shadow: 0 0 0 .2rem rgba(23,105,170,.12);
+    }
+
+    .field-hint {
+        color: #667085;
+        font-size: .88rem;
+        margin-top: 6px;
+    }
+
+    .form-check-card {
+        background: #f7fafc;
+        border: 1px solid #d8e0ea;
+        border-radius: 8px;
+        padding: 16px;
+    }
+
+    .btn-save-company {
+        min-height: 50px;
+        border: none;
+        border-radius: 8px;
+        background: #0f426d;
+        color: #fff;
+        font-weight: 900;
+        padding-left: 22px;
+        padding-right: 22px;
+    }
+
+        .btn-save-company:hover,
+        .btn-save-company:focus {
+            background: #1769aa;
+            color: #fff;
+        }
+
+    @@media (max-width: 992px) {
+        .company-onboarding {
+            grid-template-columns: 1fr;
+        }
+
+        .company-intro {
+            min-height: auto;
+            position: relative;
+            top: 0;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .company-form-card,
+        .company-intro {
+            border-radius: 0;
+            border-left: 0;
+            border-right: 0;
+        }
+
+        .company-form-card {
+            padding: 24px;
+        }
+
+        .company-form-header,
+        .company-logo-picker {
+            grid-template-columns: 1fr;
+        }
+
+        .company-logo-picker {
+            display: grid;
+        }
+    }
+</style>
+
+<div class="company-onboarding">
+
+    <aside class="company-intro">
+
+        <div>
+            <div class="company-intro-badge">
+                <i class="bi bi-building-check"></i>
+                Perfil empresarial
+            </div>
+
+            <h1>
+                Complete o perfil da sua empresa.
+            </h1>
+
+            <p>
+                Essas informações aparecem para estudantes quando eles buscam vagas,
+                exploram talentos e conhecem empresas parceiras na plataforma.
+            </p>
+        </div>
+
+        <div class="company-steps">
+            <div class="company-step">
+                <i class="bi bi-card-heading"></i>
+                Nome, área de atuação e contato.
+            </div>
+            <div class="company-step">
+                <i class="bi bi-stars"></i>
+                Tecnologias, cultura e o que vocês buscam.
+            </div>
+            <div class="company-step">
+                <i class="bi bi-briefcase"></i>
+                Depois disso, publique suas vagas.
+            </div>
+        </div>
+
+    </aside>
+
+    <section class="company-form-card">
+
+        <div class="company-form-header">
+            <div>
+                <div class="company-form-title">
+                    Dados da empresa
+                </div>
+                <p class="company-form-subtitle">
+                    Preencha o essencial agora. Você pode editar o perfil depois.
+                </p>
+            </div>
+        </div>
+
+        <form asp-action="Create"
+              method="post"
+              enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-4">
+            </div>
+
+            <div class="company-logo-picker">
+
+                <div class="company-logo-preview">
+                    <i id="previewIcon"
+                       class="bi bi-building"></i>
+                    <img id="preview"
+                         alt="Prévia da imagem" />
+                </div>
+
+                <div class="company-logo-copy">
+                    <strong>Logo ou foto da empresa</strong>
+                    <span>Use uma imagem quadrada para um resultado mais bonito.</span>
+
+                    <input name="foto"
+                           type="file"
+                           class="form-control"
+                           accept="image/*"
+                           onchange="previewImagem(event)" />
+                </div>
+
+            </div>
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label asp-for="Nome"
+                           class="form-label">
+                        Nome da empresa
+                    </label>
+                    <input asp-for="Nome"
+                           class="form-control"
+                           placeholder="Ex: Sistemas Simples" />
+                    <span asp-validation-for="Nome"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="AreaAtuacao"
+                           class="form-label">
+                        Área de atuação
+                    </label>
+                    <input asp-for="AreaAtuacao"
+                           class="form-control"
+                           placeholder="Ex: Tecnologia, Educação, Saúde" />
+                    <span asp-validation-for="AreaAtuacao"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Email"
+                           class="form-label">
+                        E-mail de contato
+                    </label>
+                    <input asp-for="Email"
+                           class="form-control"
+                           placeholder="empresa@email.com" />
+                    <span asp-validation-for="Email"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Tecnologias"
+                           class="form-label">
+                        Tecnologias ou áreas
+                    </label>
+                    <input asp-for="Tecnologias"
+                           class="form-control"
+                           placeholder="Ex: .NET, SQL, Suporte, UX" />
+                    <div class="field-hint">
+                        Separe por vírgulas para facilitar a leitura.
+                    </div>
+                    <span asp-validation-for="Tecnologias"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-check-card">
+                        <div class="form-check">
+                            <input asp-for="EhEgressoEmpreendedor"
+                                   class="form-check-input" />
+                            <label asp-for="EhEgressoEmpreendedor"
+                                   class="form-check-label fw-bold">
+                                Sou egresso empreendedor da Universidade
+                            </label>
+                        </div>
+                        <div class="field-hint">
+                            Marque esta opção quando a empresa for de um egresso empreendedor.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Descricao"
+                           class="form-label">
+                        Sobre a empresa
+                    </label>
+                    <textarea asp-for="Descricao"
+                              class="form-control"
+                              placeholder="Conte brevemente o que a empresa faz, seu mercado e sua cultura."></textarea>
+                    <span asp-validation-for="Descricao"
+                          class="text-danger">
+                    </span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="OQueBusca"
+                           class="form-label">
+                        O que a empresa busca nos estudantes
+                    </label>
+                    <textarea asp-for="OQueBusca"
+                              class="form-control"
+                              placeholder="Ex: estudantes com vontade de aprender, boa comunicação e interesse em desenvolvimento web."></textarea>
+                    <span asp-validation-for="OQueBusca"
+                          class="text-danger">
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <button type="submit"
+                        class="btn btn-save-company">
+                    <i class="bi bi-check-circle me-2"></i>
+                    Salvar perfil da empresa
+                </button>
+            </div>
+
+        </form>
+
+    </section>
+
+</div>
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function previewImagem(event) {
+            const input = event.target;
+            const preview = document.getElementById("preview");
+            const previewIcon = document.getElementById("previewIcon");
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block";
+                    previewIcon.style.display = "none";
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

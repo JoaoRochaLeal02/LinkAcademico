@@ -1,0 +1,25 @@
+@model LinkAcademico.Models.Vaga
+
+@{
+    ViewData["Title"] = "Excluir vaga";
+}
+
+<div class="bg-white border rounded-3 shadow-sm p-4">
+    <h1 class="fw-bold">Excluir vaga</h1>
+    <p class="text-muted">
+        Tem certeza que deseja excluir a vaga <strong>@Model.Titulo</strong>?
+        As candidaturas vinculadas também serão removidas.
+    </p>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <button type="submit" class="btn btn-danger">
+            Excluir
+        </button>
+
+        <a asp-action="Minhas" class="btn btn-outline-secondary">
+            Cancelar
+        </a>
+    </form>
+</div>
