@@ -63,7 +63,21 @@ A estrutura do banco de dados pode ser criada através das migrations do Entity 
 
 ## 📸 Demonstração
 
-Imagens do sistema serão adicionadas nesta seção.
+### Página inicial
+
+![Página inicial do Link Acadêmico](docs/images/inicio%20site.png)
+
+### Cadastro de usuário
+
+![Tela de cadastro do Link Acadêmico](docs/images/tela%20de%20cadastro.png)
+
+### Login
+
+![Área do estudante no Link Acadêmico](docs/images/tela%20inicial.png)
+
+### Empresas parceiras
+
+![Empresas parceiras no Link Acadêmico](docs/images/empresas.png)
 
 ## 👨‍💻 Autor
 
